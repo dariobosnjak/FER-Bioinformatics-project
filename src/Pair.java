@@ -32,4 +32,12 @@ public class Pair<X, Y> {
     public Y getSecondElement() {
         return secondElement;
     }
+
+    @Override
+    public String toString() {
+        return "Pair(" +
+                firstElement +
+                ", " + secondElement +
+                ")";
+    }
 }
