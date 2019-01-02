@@ -2,10 +2,7 @@ package lcsk;
 
 import utils.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class LCSKPlusPlus {
 
@@ -17,6 +14,25 @@ public class LCSKPlusPlus {
         String y = "ABCBA";
 
         ArrayList<MatchPair> matchPairs = findAllKMatchPairs(x, y, k);
+
+        ArrayList<Event> events = extractEvents(matchPairs);
+        events.sort(new RowMajorEventComparator());
+    }
+
+    /**
+     * Extracts events (start and end pairs).
+     */
+    private static ArrayList<Event> extractEvents(ArrayList<MatchPair> matchPairs) {
+        ArrayList<Event> events = new ArrayList<>();
+
+        for (MatchPair matchPair : matchPairs) {
+            Event startEvent = new Event(matchPair.start, Event.EventType.START);
+            Event endEvent = new Event(matchPair.end, Event.EventType.END);
+            events.add(startEvent);
+            events.add(endEvent);
+        }
+
+        return events;
     }
 
     /**
@@ -87,7 +103,7 @@ public class LCSKPlusPlus {
     /**
      * Represents one match pair.
      */
-    public static class MatchPair {
+    static class MatchPair {
         private int length;
         private Pair<Integer, Integer> start;
         private Pair<Integer, Integer> end;
