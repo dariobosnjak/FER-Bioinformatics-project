@@ -14,15 +14,15 @@ public class RowMajorEventComparator implements Comparator<Event> {
         // o1 == o
         if (o1.equals(o2)) return 0;
 
-        int i1 = o1.getPair().getFirstElement();
-        int j1 = o1.getPair().getSecondElement();
-        int i2 = o2.getPair().getFirstElement();
-        int j2 = o2.getPair().getSecondElement();
+        int i1 = o1.getPair().getFirstElement(); // row
+        int j1 = o1.getPair().getSecondElement(); // column
+        int i2 = o2.getPair().getFirstElement(); // row
+        int j2 = o2.getPair().getSecondElement(); // column
 
         // o1 < o2
-        if ((j1 < j2) ||
-                (j1 == j2 && i1 < i2) ||
-                (i1 == i2 && j1 == j2 && o1.getType() == Event.EventType.END && o2.getType() == Event.EventType.START)
+        if ((i1 < i2) || // row1 is "above" row2 in a matrix
+                (i1 == i2 && j1 < j2) || // rows are the same but column1 is on the left side with respect to the column 2
+                (j1 == j2 && i1 == i2 && o1.getType() == Event.EventType.END && o2.getType() == Event.EventType.START) // rows and columns are the same, but second event is of type START
         )
             return -1;
 
