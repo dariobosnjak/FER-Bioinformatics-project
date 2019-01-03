@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * Event object. Holds pair which represents start or end of the k-match.
  */
-class Event {
+public class Event {
     enum EventType {
         START, END;
     }
