@@ -3,55 +3,80 @@ package lcsk;
 import utils.BinarySearch;
 import utils.Pair;
 
+import java.io.*;
 import java.util.*;
 
 public class LCSKPlusPlus {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         // TODO load arguments
         int k = 3;
-        String x = "ABCDE";
-        String y = "ABCBA";
+
+        File file = new File("input");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String x = br.readLine();//"ABCDEFGH"; // "ATTATG"
+        String y = br.readLine();//"ABCDEFGH"; // "CTATAGAGTA"
 
         int[][] dp = new int[x.length()][y.length()];
-        int[] maxColDp = new int[x.length()];
+        // sparse dynamic programming table
+        //HashMap<Pair<Integer, Integer>, Integer> dp = new HashMap<>();
+        int[] maxColDp = new int[y.length()];
 
         ArrayList<MatchPair> matchPairs = findAllKMatchPairs(x, y, k);
 
         ArrayList<Event> events = extractEvents(matchPairs);
         events.sort(new RowMajorEventComparator());
 
+        int cntr = 0;
         for (Event event : events) {
             if (event.getType() == Event.EventType.START) {
                 Pair<Integer, Integer> p = event.getPair();
                 int max = findMaxInArray(maxColDp, 0, p.getSecondElement() + 1);
                 dp[p.getFirstElement()][p.getSecondElement()] = k + max;
             } else {
+                // P is END (indexes should be subtracted by one because they are exclusive)
                 Pair<Integer, Integer> eventPair = event.getPair();
-                Pair<Integer, Integer> p = new Pair<>(eventPair.getFirstElement() + k, eventPair.getSecondElement() + k);
+                Pair<Integer, Integer> p = new Pair<>(eventPair.getFirstElement(), eventPair.getSecondElement());
+                // get value of dp at P start position
+                int dpOfPStart = dp[p.getFirstElement() - k][p.getSecondElement() - k];
 
                 // find G such that P continues G -> ip - jp == ig - jg && ip - ig = 1
+                // P is END => G is also END
                 Pair<Integer, Integer> g = findG(p, events);
+
                 if (g != null) {
                     // if dp(G) + 1 > dp(P)
-                    int dpOfG = dp[g.getFirstElement()][g.getSecondElement()];
-                    int dpOfP = dp[p.getFirstElement()][p.getSecondElement()];
-                    if(dpOfG + 1> dpOfP){
-                        // dp(P) = dp(G) + 1
-                        dp[p.getFirstElement()][p.getSecondElement()] = dpOfG + 1;
-                    }
+                    int dpOfGStart = dp[g.getFirstElement() -k][g.getSecondElement() -k];//dp[g.getFirstElement() - 1][g.getSecondElement() - 1];
 
-                    // if dp(P) > maxColDp(jp + k)
-                    if(dp[p.getFirstElement()][p.getFirstElement()] > maxColDp[p.getSecondElement() + k]) {
-                        // maxColDp(jp + k) = dp(p)
-                        maxColDp[p.getSecondElement() + k] = dp[p.getFirstElement()][p.getFirstElement()];
+                    if (dpOfGStart + 1 > dpOfPStart) {
+                        // dp(P) = dp(G) + 1
+                        dp[p.getFirstElement() - k][p.getSecondElement() - k] = dpOfGStart + 1;
                     }
                 }
+                // if dp(P) > maxColDp(jp)
+                if (dp[p.getFirstElement() - k][p.getSecondElement() - k] > maxColDp[p.getSecondElement() - k]) {
+                    // maxColDp(jp) = dp(p)
+                    maxColDp[p.getSecondElement() - k] = dp[p.getFirstElement() - k][p.getSecondElement() - k];
+                    //System.out.println(maxColDp[p.getSecondElement() - 1]);
+                }
             }
+            //System.out.println();
+            //printMatrix(dp);
         }
+
+        // TODO - reduce time complexity by saving max value in the loop
         int result = findMaxInMatrix(dp);
         System.out.println(result);
+    }
+
+    private static void printMatrix(int[][] m) {
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[0].length; j++) {
+                System.out.print(m[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     /**
@@ -65,13 +90,13 @@ public class LCSKPlusPlus {
 
         int ig = ip - 1;
         int jg = -(ip - jp - ig);
-        Event g = new Event(new Pair<Integer, Integer>(ig, jg), Event.EventType.START);
+        Event g = new Event(new Pair<Integer, Integer>(ig, jg), Event.EventType.END);
 
         RowMajorEventComparator rmec = new RowMajorEventComparator();
         BinarySearch<Event> bs = new BinarySearch<>(rmec);
 
-        Event[] eventsArray = events.toArray(new Event[events.size()]);
-        int gIndex = bs.binarySearch(eventsArray, g);
+        //Event[] eventsArray = events.toArray(new Event[events.size()]);
+        int gIndex = bs.binarySearch(events, g);
 
         if (gIndex != -1)
             return g.getPair();
@@ -88,9 +113,9 @@ public class LCSKPlusPlus {
         int numberOfColumns = matrix[0].length;
         int numberOfRows = matrix.length;
 
-        for(int i = 0; i < numberOfColumns; i++) {
-            for(int j = 0; j < numberOfColumns; j++) {
-                if(matrix[i][j] > max) {
+        for (int i = 0; i < numberOfRows; i++) {
+            for (int j = 0; j < numberOfColumns; j++) {
+                if (matrix[i][j] > max) {
                     max = matrix[i][j];
                 }
             }
@@ -109,7 +134,7 @@ public class LCSKPlusPlus {
     private static int findMaxInArray(int[] arr, int startingIndex, int endingIndex) {
         int max = Integer.MIN_VALUE;
 
-        for (int i = startingIndex; i <= endingIndex; i++) {
+        for (int i = startingIndex; i < endingIndex; i++) {
             if (arr[i] > max) {
                 max = arr[i];
             }
