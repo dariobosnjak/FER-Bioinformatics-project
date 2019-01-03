@@ -2,7 +2,7 @@ package utils;
 
 import java.util.Comparator;
 
-class BinarySearch<T> {
+public class BinarySearch<T> {
 
     private Comparator<T> comparator;
 
