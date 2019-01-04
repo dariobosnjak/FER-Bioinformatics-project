@@ -50,7 +50,19 @@ class LCSKPlusPlusTest {
 
     @org.junit.jupiter.api.Test
     void findAllKMatchPairsNaiveSearch() {
+        ArrayList<LCSKPlusPlus.MatchPair> matchPairs = LCSKPlusPlus.findAllKMatchPairsNaiveSearch(x, y, k);
 
+        for (LCSKPlusPlus.MatchPair m : matchPairs) {
+            Pair<Integer, Integer> mStart = m.getStart();
+            Pair<Integer, Integer> mEnd = m.getEnd();
+
+            String xSubstring = x.substring(mStart.getFirstElement(), mEnd.getFirstElement());
+            String ySubstring = y.substring(mStart.getSecondElement(), mEnd.getSecondElement());
+
+            System.out.println(m + " substringX=" + xSubstring + " substringY=" + ySubstring);
+
+            assertEquals(xSubstring, ySubstring);
+        }
     }
 
     @Test
