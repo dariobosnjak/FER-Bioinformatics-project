@@ -11,7 +11,7 @@ public class LCSKPlusPlus {
     public static void main(String[] args) throws IOException {
 
         // TODO load arguments
-        int k = 5;
+        int k = 20;
 
         File file = new File("input");
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -153,22 +153,20 @@ public class LCSKPlusPlus {
         // keys are k-grams from string sequence, values are utils.Pair objects which represent the beginning and the end
         // (indexes)of the k-gram
         HashMap<String, ArrayList<Pair<Integer, Integer>>> xMap = initializeKGramMap(x, k);
-        HashMap<String, ArrayList<Pair<Integer, Integer>>> yMap = initializeKGramMap(y, k);
 
         // intersection (keep only items which appear in both maps as keys (k-grams))
         Set<String> keysIntersection = new TreeSet<>(xMap.keySet());
-        keysIntersection.retainAll(yMap.keySet());
-
-        // construct result
-        for (String key : keysIntersection) {
-            for (Pair<Integer, Integer> xValue : xMap.get(key)) {
-                for (Pair<Integer, Integer> yValue : yMap.get(key)) {
-                    Pair<Integer, Integer> start = new Pair<>(xValue.getFirstElement(), yValue.getFirstElement());
-                    Pair<Integer, Integer> end = new Pair<>(xValue.getSecondElement(), yValue.getSecondElement());
-                    matchPairs.add(new MatchPair(start, end));
+        for (int yStart = 0; yStart < y.length() - (k - 1); yStart++) {
+            // check if xMap contains this kGram
+            if(xMap.containsKey(y.substring(yStart, yStart + k))){
+                String key = y.substring(yStart, yStart + k);
+                // add all matches to result
+                for(Pair<Integer, Integer> xStartEnd : xMap.get(key)){
+                    matchPairs.add(new MatchPair(new Pair<>(xStartEnd.getFirstElement(), yStart), new Pair<>(xStartEnd.getSecondElement(), yStart + k)));
                 }
             }
         }
+
         return matchPairs;
     }
 
