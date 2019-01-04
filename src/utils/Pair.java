@@ -8,8 +8,8 @@ import java.util.Objects;
  * @param <Y> object type for the second element of the pair
  */
 public class Pair<X, Y> {
-    private final X firstElement;
-    private final Y secondElement;
+    private X firstElement;
+    private Y secondElement;
 
     /**
      * Constructs new Pair object.
@@ -35,6 +35,14 @@ public class Pair<X, Y> {
      */
     public Y getSecondElement() {
         return secondElement;
+    }
+
+    public void setFirstElement(X firstElement) {
+        this.firstElement = firstElement;
+    }
+
+    public void setSecondElement(Y secondElement) {
+        this.secondElement = secondElement;
     }
 
     @Override
