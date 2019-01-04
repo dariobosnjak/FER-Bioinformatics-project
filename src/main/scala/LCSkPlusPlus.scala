@@ -1,5 +1,8 @@
+import java.io.File
+
 import scala.collection.Set
 import scala.collection.mutable.{ArrayBuffer, HashMap => MutableHashMap}
+import scala.io.Source
 
 object LCSkPlusPlus {
 
@@ -38,13 +41,13 @@ object LCSkPlusPlus {
     val ySubstringStartIndices = MutableHashMap[String, ArrayBuffer[Int]]()
 
     // hash all k-length substrings of X and Y in O(n + m) time
-    for (i <- 0 until n if i + k - 1 <= n - 1) {
+    for (i <- 0 until n if i + k <= n) {
       val substring = X.substring(i, i + k)
       val currentValue = xSubstringStartIndices.getOrElse(substring, ArrayBuffer[Int]())
       currentValue.append(i)
       xSubstringStartIndices.update(substring, currentValue)
     }
-    for (j <- 0 until m if j + k - 1 <= m - 1) {
+    for (j <- 0 until m if j + k  <= m) {
       val substring = Y.substring(j, j + k)
       val currentValue = ySubstringStartIndices.getOrElse(substring, ArrayBuffer[Int]())
       currentValue.append(j)
@@ -60,71 +63,108 @@ object LCSkPlusPlus {
       val yStartIndices: ArrayBuffer[Int] = ySubstringStartIndices(substring)
       // create match pairs - combine all starting indices from X with all from Y
       for (i <- xStartIndices; j <- yStartIndices) {
-        kMatchPairs.append(new MatchPair(i, i + k - 1, j, j + k - 1))
+        // end is exclusive
+        kMatchPairs.append(new MatchPair(new Event(i, j, Event.START), new Event(i + k, j + k, Event.END)))
       }
     }
     kMatchPairs.toArray
   }
 
+  /**
+    * Returns start and end events from match pairs.
+    *
+    * @param matchPairs match pairs to process
+    * @return start and end events
+    */
   def getEvents(matchPairs: Array[MatchPair]): Array[Event] = {
     val events: ArrayBuffer[Event] = ArrayBuffer[Event]()
     for (matchPair <- matchPairs) {
       events.append(
-        new Event(matchPair.startX, matchPair.startY, Event.START),
-        new Event(matchPair.endX, matchPair.endY, Event.END))
+        Event.of(matchPair.startEvent),
+        Event.of(matchPair.endEvent))
     }
     events.toArray
   }
 
-  def findEventThatContinues(events: Array[Event], event: Event): Option[Event] = {
+  /**
+    * Returns an event from the array of events for which it is true: an event passed as the second parameter continues
+    * that event.
+    *
+    * @param events array of events to check continuation of match pairs
+    * @param event  event that continues some event from events array
+    * @return Option[Event] - if event is found it is defined, otherwise it is empty
+    */
+  def getEventThatContinues(events: Array[Event], event: Event): Option[Event] = {
     var notFound = true
-    var g: Option[Event] = Option[Event](null)
-    for (e <- events; if notFound) {
-      if (event.continues(e)) {
+    var g: Event = new Event(event.i - 1, event.j - 1, Event.START)
+
+    // O(logn)
+    var left = 0
+    var right = events.length - 1
+    while (left <= right && notFound) {
+      val middle = (right + left) / 2
+      if (events(middle) < g) {
+        // go to the right half
+        left = middle + 1
+      } else if (events(middle) > g) {
+        right = middle - 1
+      } else {
         notFound = false
-        g = Option[Event](Event.of(e))
       }
     }
-    g
+
+    if (notFound) Option[Event](null) else Option[Event](g)
   }
 
-  def main(args: Array[String]): Unit = {
-    val X = args(0)
-    val Y = args(1)
-    val k = args(2).toInt
-
+  def runLcskPlusPlus(X: String, Y: String, k: Int): Int = {
     val n = X.length
     val m = Y.length
 
-    val maxColDp: Array[Int] = Array.fill(n){0}
+    val dp: Array[Array[Int]] = Array.ofDim(n, m)
+    val maxColDp: Array[Int] = Array.fill(m) {
+      0
+    }
 
     val matchPairs: Array[MatchPair] = findKMatchPairs(X, Y, k)
-    println(matchPairs.toList)
-
-    val events: Array[Event] = getEvents(matchPairs)
-
-    var dp: Array[Array[Int]] = Array.ofDim(n, m)
+    val events: Array[Event] = getEvents(matchPairs).sorted
 
     for (event <- events) {
       if (event.eventType == Event.START) {
-        dp(event.i)(event.j) = k + maxColDp.slice(0, event.j + 1).max // TODO - u sliceu mora ici + 1 jer za j=0 vrati Empty?
-      } else if (event.eventType == Event.END) {
-        val g: Option[Event] = findEventThatContinues(events, event)
+        dp(event.i)(event.j) = if (maxColDp.slice(0, event.j + 1 - 1).isEmpty) k else k + maxColDp.slice(0, event.j + 1 - 1).max
+
+      }
+      else if (event.eventType == Event.END) {
+        // calculate start event
+        val p = new Event(event.i - k, event.j - k, Event.START)
+        // END event contains exclusive indices - when indexing dp and maxColDp use i-1 and j-1
+        val g: Option[Event] = getEventThatContinues(events, p)
         if (g.isDefined) {
-          dp(event.i)(event.j) = math.max(dp(event.i)(event.j), dp(g.get.i)(g.get.j) + 1)
+          dp(p.i)(p.j) = math.max(dp(p.i)(p.j), dp(g.get.i)(g.get.j) + 1)
         }
-        maxColDp(event.j + k - 1) = math.max(maxColDp(event.j + k - 1), dp(event.i)(event.j)) // TODO - mora ici k-1 zbog 0-based indexa?
+        maxColDp(event.j - 1) = math.max(maxColDp(event.j - 1), dp(p.i)(p.j))
       }
     }
 
-    val result = dp.flatten.max
+    dp.flatten.max
+  }
 
-    println(result)
+  def main(args: Array[String]): Unit = {
+    val filePath = args(0)
+    val k = args(1).toInt
 
-    val e1 = new Event(2,8,Event.START)
-    val e2 = new Event(3,9,Event.START)
-    println(e2.continues(e1))
-    println(e1.continues(e2))
+    var lineIterator = Source.fromFile(filePath).getLines()
+    if (lineIterator.size != 2) {
+      println("ERROR - FILE SHOULD CONTAIN 2 LINES")
+      sys.exit(-1)
+    }
+    lineIterator = Source.fromFile(filePath).getLines()
+    val X: String = lineIterator.next()
+    val Y: String = lineIterator.next()
+
+    println("X=" + X, "Y=" + Y, "k=" + k)
+
+    val similarity = runLcskPlusPlus(X, Y, k)
+    println(similarity)
   }
 }
 

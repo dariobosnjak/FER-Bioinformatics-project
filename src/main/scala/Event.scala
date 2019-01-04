@@ -6,7 +6,7 @@ import Event.EventType
   *
   * @param _i         index in the first string
   * @param _j         index in the second string
-  * @param _eventType START or END
+  * @param _eventType START or END, if END indices i,j are exclusive
   */
 class Event(_i: Int, _j: Int, _eventType: EventType) extends Ordered[Event] {
   def i: Int = _i
@@ -14,24 +14,6 @@ class Event(_i: Int, _j: Int, _eventType: EventType) extends Ordered[Event] {
   def j: Int = _j
 
   def eventType: EventType = _eventType
-
-  /**
-    * Returns true if this event continues that event.
-    * Event P continues event G if starting indices of G (iG, jG) one are on the same primary diagonal as (iP, jP), and
-    * iP - iG = 1.
-    *
-    * @param that other event
-    * @return true if this continues that
-    */
-  def continues(that: Event): Boolean = {
-    // on same primary diagonal
-    val samePrimDiag: Boolean = this.i - this.j == that.i - that.j
-    // this event is only one down-right position from that event
-    val oneDownRightPosition: Boolean = (this.i - that.i) == 1
-
-    samePrimDiag && oneDownRightPosition
-  }
-
 
   override def equals(obj: Any): Boolean = {
     obj match {
@@ -71,6 +53,10 @@ class Event(_i: Int, _j: Int, _eventType: EventType) extends Ordered[Event] {
     }
 
     cmp
+  }
+
+  override def toString: String = {
+    "Pair(" + i + ", " + j + ") " + eventType
   }
 }
 
