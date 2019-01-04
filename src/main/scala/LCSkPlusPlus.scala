@@ -35,7 +35,8 @@ object LCSkPlusPlus {
 
     for (i <- 0 until n if i + k <= n) {
       // add only substrings that are in both strings
-      if (currentSubstringStartIndices.isEmpty || currentSubstringStartIndices.isDefined && currentSubstringStartIndices.get.get(str.substring(i, i + k)).isDefined) {
+      if (currentSubstringStartIndices.isEmpty ||
+        (currentSubstringStartIndices.isDefined && currentSubstringStartIndices.get.get(str.substring(i, i + k)).isDefined)) {
         if (substringStartIndices.get(str.substring(i, i + k)).isDefined) {
           substringStartIndices(str.substring(i, i + k)).append(i)
         } else {
@@ -56,7 +57,7 @@ object LCSkPlusPlus {
   def getKMatchPairs(X: String, Y: String, k: Int): Array[MatchPair] = {
     val n = X.length
     val m = Y.length
-
+    val freeMem = java.lang.Runtime.getRuntime
     // hash all k-length substrings of X and Y in O(n + m) time
     // key = substring
     // value = an array of starting indices
@@ -70,11 +71,9 @@ object LCSkPlusPlus {
     // if both strings contain substring it is a match pair
     val substrings: Set[String] = xSubstringStartIndices.keySet.intersect(ySubstringStartIndices.keySet)
     for (substring <- substrings) {
-      val xStartIndices: ArrayBuffer[Int] = xSubstringStartIndices(substring)
-      val yStartIndices: ArrayBuffer[Int] = ySubstringStartIndices(substring)
       // create match pairs - combine all starting indices from X with all from Y
-      for (i <- xStartIndices; j <- yStartIndices) {
-        // end is exclusive
+      for (i <- xSubstringStartIndices(substring); j <- ySubstringStartIndices(substring)) {
+        // end is exclusive -> (i+k, j+k)
         kMatchPairs.append(new MatchPair(new Event(i, j, Event.START), new Event(i + k, j + k, Event.END)))
       }
     }
@@ -91,8 +90,9 @@ object LCSkPlusPlus {
     val events: ArrayBuffer[Event] = ArrayBuffer[Event]()
     for (matchPair <- matchPairs) {
       events.append(
-        Event.of(matchPair.startEvent),
-        Event.of(matchPair.endEvent))
+        matchPair.startEvent,
+        matchPair.endEvent
+      )
     }
     events.toArray
   }
@@ -133,16 +133,16 @@ object LCSkPlusPlus {
 
     // due to large input strings we use hash map to represent sparse matrix
     val dp: MutableHashMap[(Int, Int), Int] = MutableHashMap[(Int, Int), Int]()
-    val maxColDp: Array[Int] = Array.fill(m) {
-      0
-    }
+    val maxColDp = new FenwickTree(m)
 
     val matchPairs: Array[MatchPair] = getKMatchPairs(X, Y, k)
+    println("match parovi pronadjeni")
     val events: Array[Event] = getEvents(matchPairs).sorted
-
+    println("eventi pronadjeni")
+    println("nEvents: ", events.length)
     for (event <- events) {
       if (event.eventType == Event.START) {
-        dp.put((event.i, event.j), if (maxColDp.slice(0, event.j).isEmpty) k else k + maxColDp.slice(0, event.j).max)
+        dp.put((event.i, event.j), if (event.j - 0 == 0) k else k + maxColDp.max(event.j))
       }
       else if (event.eventType == Event.END) {
         // calculate start event
@@ -152,7 +152,7 @@ object LCSkPlusPlus {
           dp.put((p.i, p.j), math.max(dp((p.i, p.j)), dp((g.get.i, g.get.j)) + 1))
         }
         // END event contains exclusive indices - when indexing dp and maxColDp use i-1 and j-1
-        maxColDp(event.j - 1) = math.max(maxColDp(event.j - 1), dp((p.i, p.j)))
+        maxColDp.update(event.j - 1, math.max(maxColDp.tree(event.j - 1)._1, dp((p.i, p.j))), p)
       }
     }
 
@@ -179,10 +179,11 @@ object LCSkPlusPlus {
     val X: String = lineIterator.next()
     val Y: String = lineIterator.next()
 
-    println("X=" + X, "Y=" + Y, "k=" + k)
-
+    println("file=" + filePath, "k=" + k)
+    println("file=" + filePath, "k=" + k)
     val similarity = runLcskPlusPlus(X, Y, k)
-    println(similarity)
+    println("Similarity: " + similarity)
+
   }
 }
 
