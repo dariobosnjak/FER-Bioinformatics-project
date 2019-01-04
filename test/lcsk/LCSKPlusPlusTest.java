@@ -1,4 +1,5 @@
 package lcsk;
+import org.junit.jupiter.api.Test;
 import utils.Pair;
 
 import java.util.ArrayList;
@@ -35,12 +36,27 @@ class LCSKPlusPlusTest {
 
     @org.junit.jupiter.api.Test
     void main() {
+        Pair<Integer, Integer> p1 = new Pair<>(3, 5);
+        Pair<Integer, Integer> p2 = new Pair<>(3, 5);
+
+        Event e1 = new Event(p1, Event.EventType.START);
+        Event e2 = new Event(p2, Event.EventType.END);
+        RowMajorEventComparator comparator = new RowMajorEventComparator();
+
+        System.out.println(comparator.compare(e1, e2));
+        System.out.println(comparator.compare(e2, e1));
+
     }
 
     @org.junit.jupiter.api.Test
-    void findAllKMatchPairs() {
+    void findAllKMatchPairsNaiveSearch() {
 
-        ArrayList<LCSKPlusPlus.MatchPair> matchPairs = LCSKPlusPlus.findAllKMatchPairs(x, y, k);
+    }
+
+    @Test
+    void findAllKMatchPairsSimpleHashSearch() {
+
+        ArrayList<LCSKPlusPlus.MatchPair> matchPairs = LCSKPlusPlus.findAllKMatchPairsSimpleHashSearch(x, y, k);
 
         for (LCSKPlusPlus.MatchPair m : matchPairs) {
             Pair<Integer, Integer> mStart = m.getStart();

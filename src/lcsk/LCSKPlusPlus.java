@@ -1,6 +1,7 @@
 package lcsk;
 
 import utils.BinarySearch;
+import utils.FenwickTree;
 import utils.Pair;
 
 import java.io.*;
@@ -11,7 +12,7 @@ public class LCSKPlusPlus {
     public static void main(String[] args) throws IOException {
 
         // TODO load arguments
-        int k = 20;
+        int k = 100;
 
         File file = new File("input");
         BufferedReader br = new BufferedReader(new FileReader(file));
@@ -20,10 +21,10 @@ public class LCSKPlusPlus {
 
         // sparse dynamic programming table, key is location in the table
         HashMap<Pair<Integer, Integer>, Integer> dp = new HashMap<>();
-        int[] maxColDp = new int[y.length()];
+        FenwickTree maxColDp = new FenwickTree(y.length());
 
         // get all k-match pairs between X and Y
-        ArrayList<MatchPair> matchPairs = findAllKMatchPairs(x, y, k);
+        ArrayList<MatchPair> matchPairs = findAllKMatchPairsSimpleHashSearch(x, y, k);
 
         // all starts and ends of match pairs, sorted in row-major order
         ArrayList<Event> events = extractEvents(matchPairs);
@@ -32,8 +33,9 @@ public class LCSKPlusPlus {
         for (Event event : events) {
             if (event.getType() == Event.EventType.START) {
                 Pair<Integer, Integer> p = event.getPair();
-                int max = findMaxInArray(maxColDp, 0, p.getSecondElement());
-                //System.out.println(max);
+                //int max = findMaxInArray(maxColDp, 0, p.getSecondElement());
+                // getMax takes exclusive ending index
+                int max = maxColDp.getMax(p.getSecondElement());
                 dp.put(p, k + max);
             } else {
                 // event.getPair() is an END (indexes should be subtracted by one because they are exclusive)
@@ -51,9 +53,9 @@ public class LCSKPlusPlus {
                     }
                 }
                 // if dp(PStart) > maxColDp(PEnd.j)
-                if (dp.get(pStartLocation) > maxColDp[event.getPair().getSecondElement() - 1]) {
+                if (dp.get(pStartLocation) > maxColDp.getElement(event.getPair().getSecondElement() - 1)) {
                     // maxColDp(PEnd.j) = dp(PStart)
-                    maxColDp[event.getPair().getSecondElement() - 1] = dp.get(pStartLocation);
+                    maxColDp.update(event.getPair().getSecondElement() - 1, dp.get(pStartLocation));
                 }
             }
         }
@@ -63,15 +65,6 @@ public class LCSKPlusPlus {
             result = Collections.max(dp.values());
         }
         System.out.println(result);
-    }
-
-    private static void printMatrix(int[][] m) {
-        for (int i = 0; i < m.length; i++) {
-            for (int j = 0; j < m[0].length; j++) {
-                System.out.print(m[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 
     /**
@@ -142,7 +135,7 @@ public class LCSKPlusPlus {
      * @param k match length
      * @return all k-match pairs between x and y
      */
-    static ArrayList<MatchPair> findAllKMatchPairs(String x, String y, int k) {
+    static ArrayList<MatchPair> findAllKMatchPairsNaiveSearch(String x, String y, int k) {
 
         ArrayList<MatchPair> matchPairs = new ArrayList<>();
 
@@ -158,10 +151,10 @@ public class LCSKPlusPlus {
         Set<String> keysIntersection = new TreeSet<>(xMap.keySet());
         for (int yStart = 0; yStart < y.length() - (k - 1); yStart++) {
             // check if xMap contains this kGram
-            if(xMap.containsKey(y.substring(yStart, yStart + k))){
+            if (xMap.containsKey(y.substring(yStart, yStart + k))) {
                 String key = y.substring(yStart, yStart + k);
                 // add all matches to result
-                for(Pair<Integer, Integer> xStartEnd : xMap.get(key)){
+                for (Pair<Integer, Integer> xStartEnd : xMap.get(key)) {
                     matchPairs.add(new MatchPair(new Pair<>(xStartEnd.getFirstElement(), yStart), new Pair<>(xStartEnd.getSecondElement(), yStart + k)));
                 }
             }
@@ -170,8 +163,51 @@ public class LCSKPlusPlus {
         return matchPairs;
     }
 
+    /**
+     * Finds all k-match pairs between x and y sequence.
+     *
+     * @param x string
+     * @param y string
+     * @param k match length
+     * @return all k-match pairs between x and y
+     */
+    static ArrayList<MatchPair> findAllKMatchPairsSimpleHashSearch(String x, String y, int k) {
+        ArrayList<MatchPair> matchPairs = new ArrayList<>();
+        HashMap<Long, ArrayList<Pair<Integer, Integer>>> kGramMapX = new HashMap<>();
+
+        for (int startX = 0; startX < x.length() - (k - 1); startX++) {
+            long hash = (long) x.substring(startX, startX + k).hashCode();
+            kGramMapX.computeIfAbsent(hash, k1 -> new ArrayList<>());
+            // start of the substring in Y is unknown for now
+            kGramMapX.get(hash).add(new Pair<>(startX, null));
+        }
+
+        for (int startY = 0; startY < y.length() - (k - 1); startY++) {
+            long hash = (long) y.substring(startY, startY + k).hashCode();
+            if (kGramMapX.get(hash) != null) {
+                // if hashes are same -> substrings COULD be equal
+                for (Pair<Integer, Integer> p : kGramMapX.get(hash)) {
+                    if (x.substring(p.getFirstElement(), p.getFirstElement() + k).equals(y.substring(startY, startY + k))) {
+                        Pair<Integer, Integer> pCopy = new Pair<>(p.getFirstElement(), startY);
+                        Pair<Integer, Integer> end = new Pair<>(pCopy.getFirstElement() + k, pCopy.getSecondElement() + k);
+                        matchPairs.add(new MatchPair(pCopy, end));
+                    }
+                }
+            }
+        }
+        return matchPairs;
+    }
+
+    /**
+     * Finds all k-match pairs between x and y sequence.
+     *
+     * @param x string
+     * @param y string
+     * @param k match length
+     * @return all k-match pairs between x and y
+     */
     // TODO for bigger k values -> overflow
-    private ArrayList<MatchPair> findAllKMatchPairsRabinKarpSearch(String x, String y, int k){
+    private static ArrayList<MatchPair> findAllKMatchPairsRabinKarpSearch(String x, String y, int k) {
         ArrayList<MatchPair> matchPairs2 = new ArrayList<>();
 
         // large prime number
@@ -201,7 +237,7 @@ public class LCSKPlusPlus {
             //hash = (hash + prime - ((long) Math.pow(alphabetSize, k - 1) * x.charAt(startX - 1) % prime)) % prime;
             //hash = (hash * alphabetSize + x.charAt(startX + k - 1)) % prime;
 
-            if("JGABCDEFGJFDLKHFDJSH".equals(x.substring(startX, startX+k))){
+            if ("JGABCDEFGJFDLKHFDJSH".equals(x.substring(startX, startX + k))) {
                 System.out.println(hash);
             }
 
@@ -235,7 +271,7 @@ public class LCSKPlusPlus {
             hash = (hash + prime - (long) Math.pow(alphabetSize, k - 1) * y.charAt(startY - 1) % prime) % prime;
             hash = (hash * alphabetSize + y.charAt(startY + k - 1)) % prime;
 
-            if("JGABCDEFGJFDLKHFDJSH".equals(y.substring(startY, startY+k))){
+            if ("JGABCDEFGJFDLKHFDJSH".equals(y.substring(startY, startY + k))) {
                 System.out.println(hash);
                 System.out.println();
             }
