@@ -29,22 +29,19 @@ object LCSkPlusPlus {
     * @param str string
     * @param k   substring length
     */
-  private def getAllKLengthSubstringStartIndices(str: String, k: Int, currentSubstringStartIndices: Option[MutableHashMap[String, ArrayBuffer[Int]]]): MutableHashMap[String, ArrayBuffer[Int]] = {
-    var substringStartIndices = MutableHashMap[String, ArrayBuffer[Int]]()
-    val n = str.length
+  private def getAllKLengthSubstringStartIndices(X: String, k: Int): MutableHashMap[Long, ArrayBuffer[Int]] = {
+    var substringStartIndices = MutableHashMap[Long, ArrayBuffer[Int]]()
+    val n = X.length
 
     for (i <- 0 until n if i + k <= n) {
-      // add only substrings that are in both strings
-      if (currentSubstringStartIndices.isEmpty ||
-        (currentSubstringStartIndices.isDefined && currentSubstringStartIndices.get.get(str.substring(i, i + k)).isDefined)) {
-        if (substringStartIndices.get(str.substring(i, i + k)).isDefined) {
-          substringStartIndices(str.substring(i, i + k)).append(i)
-        } else {
-          substringStartIndices.put(str.substring(i, i + k), ArrayBuffer[Int]())
-          substringStartIndices(str.substring(i, i + k)).append(i)
-        }
+      if (substringStartIndices.get(X.substring(i, i + k).hashCode).isDefined) {
+        substringStartIndices(X.substring(i, i + k).hashCode).append(i)
+      } else {
+        substringStartIndices.put(X.substring(i, i + k).hashCode, ArrayBuffer[Int]())
+        substringStartIndices(X.substring(i, i + k).hashCode).append(i)
       }
     }
+
     substringStartIndices
   }
 
@@ -61,20 +58,20 @@ object LCSkPlusPlus {
     // hash all k-length substrings of X and Y in O(n + m) time
     // key = substring
     // value = an array of starting indices
-    val xSubstringStartIndices: MutableHashMap[String, ArrayBuffer[Int]] = getAllKLengthSubstringStartIndices(X, k, Option[MutableHashMap[String, ArrayBuffer[Int]]](null))
-    println("X gotov")
-    val ySubstringStartIndices: MutableHashMap[String, ArrayBuffer[Int]] = getAllKLengthSubstringStartIndices(Y, k, Option[MutableHashMap[String, ArrayBuffer[Int]]](xSubstringStartIndices))
-    println("Y gotov")
+    val xSubstringStartIndices: MutableHashMap[Long, ArrayBuffer[Int]] = getAllKLengthSubstringStartIndices(X, k)
+    println("X gotov", xSubstringStartIndices.keySet.size)
 
-    // get match pairs in O(r) time, where r is number of match pairs
     val kMatchPairs: ArrayBuffer[MatchPair] = ArrayBuffer[MatchPair]()
-    // if both strings contain substring it is a match pair
-    val substrings: Set[String] = xSubstringStartIndices.keySet.intersect(ySubstringStartIndices.keySet)
-    for (substring <- substrings) {
-      // create match pairs - combine all starting indices from X with all from Y
-      for (i <- xSubstringStartIndices(substring); j <- ySubstringStartIndices(substring)) {
-        // end is exclusive -> (i+k, j+k)
-        kMatchPairs.append(new MatchPair(new Event(i, j, Event.START), new Event(i + k, j + k, Event.END)))
+    for (j <- 0 until m if j + k <= m) {
+      val hash = Y.substring(j, j + k).hashCode
+      if (xSubstringStartIndices.get(hash).isDefined) {
+        // because of hash function it is maybe same substring
+        for (xStartIndex <- xSubstringStartIndices(hash)) {
+          if (X.substring(xStartIndex, xStartIndex + k) == Y.substring(j, j + k)) {
+            // if substrings are the same
+            kMatchPairs.append(new MatchPair(new Event(xStartIndex, j, Event.START), new Event(xStartIndex + k, j + k, Event.END)))
+          }
+        }
       }
     }
     kMatchPairs.toArray
@@ -161,6 +158,7 @@ object LCSkPlusPlus {
     else 0
   }
 
+
   def main(args: Array[String]): Unit = {
     if (args.length != 2) {
       println("ERROR - 2 arguments required: file path, k")
@@ -170,14 +168,17 @@ object LCSkPlusPlus {
     val filePath = args(0)
     val k = args(1).toInt
 
-    var lineIterator = Source.fromFile(filePath).getLines()
-    if (lineIterator.size != 2) {
-      println("ERROR - file should contain 2 lines")
-      sys.exit(-1)
-    }
-    lineIterator = Source.fromFile(filePath).getLines()
-    val X: String = lineIterator.next()
-    val Y: String = lineIterator.next()
+    val lineIterator = Source.fromFile(filePath).getLines()
+    val X = lineIterator.next()
+    val Y = lineIterator.next()
+    /*
+    // parse FASTA file
+    while (lineIterator.hasNext) {
+      if (lineIterator.next().substring(0, 1) == ">") {
+
+      }
+    }*/
+
 
     println("file=" + filePath, "k=" + k)
     println("file=" + filePath, "k=" + k)
