@@ -2,3 +2,4 @@
 project
 target
 build.sbt
+data/
