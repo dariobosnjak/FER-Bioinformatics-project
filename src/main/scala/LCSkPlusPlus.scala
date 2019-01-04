@@ -145,16 +145,24 @@ object LCSkPlusPlus {
       }
     }
 
-    dp.flatten.max
+    if (dp.flatten.length > 0)
+      dp.flatten.max
+    else
+      0
   }
 
   def main(args: Array[String]): Unit = {
+    if (args.length != 2) {
+      println("ERROR - 2 arguments required: file path, k")
+      sys.exit(-1)
+    }
+
     val filePath = args(0)
     val k = args(1).toInt
 
     var lineIterator = Source.fromFile(filePath).getLines()
     if (lineIterator.size != 2) {
-      println("ERROR - FILE SHOULD CONTAIN 2 LINES")
+      println("ERROR - file should contain 2 lines")
       sys.exit(-1)
     }
     lineIterator = Source.fromFile(filePath).getLines()

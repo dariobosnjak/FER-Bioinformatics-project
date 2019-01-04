@@ -2,4 +2,4 @@
 project
 target
 build.sbt
-data/
+data/*
