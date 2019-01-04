@@ -1,5 +1,3 @@
-import java.io.File
-
 import scala.collection.Set
 import scala.collection.mutable.{ArrayBuffer, HashMap => MutableHashMap}
 import scala.io.Source
@@ -26,33 +24,46 @@ object LCSkPlusPlus {
   }
 
   /**
-    * Finds k match pairs defined by starting indices (i, j) and length k
+    * Returns start indices forr all k-length substrings of a string passed as the first parameter.
+    *
+    * @param str string
+    * @param k   substring length
+    */
+  private def getAllKLengthSubstringStartIndices(str: String, k: Int, currentSubstringStartIndices: Option[MutableHashMap[String, ArrayBuffer[Int]]]): MutableHashMap[String, ArrayBuffer[Int]] = {
+    var substringStartIndices = MutableHashMap[String, ArrayBuffer[Int]]()
+    val n = str.length
+
+    for (i <- 0 until n if i + k <= n) {
+      // add only substrings that are in both strings
+      if (currentSubstringStartIndices.isEmpty || currentSubstringStartIndices.isDefined && currentSubstringStartIndices.get.get(str.substring(i, i + k)).isDefined) {
+        if (substringStartIndices.get(str.substring(i, i + k)).isDefined) {
+          substringStartIndices(str.substring(i, i + k)).append(i)
+        } else {
+          substringStartIndices.put(str.substring(i, i + k), ArrayBuffer[Int]())
+          substringStartIndices(str.substring(i, i + k)).append(i)
+        }
+      }
+    }
+    substringStartIndices
+  }
+
+  /**
+    * Returns k match pairs defined by starting indices (i, j) and length k
     * For small k a hash table can be used for finding k match pairs in O(n + m + r) time.
     *
     * @return array of Int tuples - starting indices in X and Y of each match pair
     */
-  def findKMatchPairs(X: String, Y: String, k: Int): Array[MatchPair] = {
+  def getKMatchPairs(X: String, Y: String, k: Int): Array[MatchPair] = {
     val n = X.length
     val m = Y.length
 
+    // hash all k-length substrings of X and Y in O(n + m) time
     // key = substring
     // value = an array of starting indices
-    val xSubstringStartIndices = MutableHashMap[String, ArrayBuffer[Int]]()
-    val ySubstringStartIndices = MutableHashMap[String, ArrayBuffer[Int]]()
-
-    // hash all k-length substrings of X and Y in O(n + m) time
-    for (i <- 0 until n if i + k <= n) {
-      val substring = X.substring(i, i + k)
-      val currentValue = xSubstringStartIndices.getOrElse(substring, ArrayBuffer[Int]())
-      currentValue.append(i)
-      xSubstringStartIndices.update(substring, currentValue)
-    }
-    for (j <- 0 until m if j + k  <= m) {
-      val substring = Y.substring(j, j + k)
-      val currentValue = ySubstringStartIndices.getOrElse(substring, ArrayBuffer[Int]())
-      currentValue.append(j)
-      ySubstringStartIndices.update(substring, currentValue)
-    }
+    val xSubstringStartIndices: MutableHashMap[String, ArrayBuffer[Int]] = getAllKLengthSubstringStartIndices(X, k, Option[MutableHashMap[String, ArrayBuffer[Int]]](null))
+    println("X gotov")
+    val ySubstringStartIndices: MutableHashMap[String, ArrayBuffer[Int]] = getAllKLengthSubstringStartIndices(Y, k, Option[MutableHashMap[String, ArrayBuffer[Int]]](xSubstringStartIndices))
+    println("Y gotov")
 
     // get match pairs in O(r) time, where r is number of match pairs
     val kMatchPairs: ArrayBuffer[MatchPair] = ArrayBuffer[MatchPair]()
@@ -120,35 +131,34 @@ object LCSkPlusPlus {
     val n = X.length
     val m = Y.length
 
-    val dp: Array[Array[Int]] = Array.ofDim(n, m)
+    // due to large input strings we use hash map to represent sparse matrix
+    val dp: MutableHashMap[(Int, Int), Int] = MutableHashMap[(Int, Int), Int]()
     val maxColDp: Array[Int] = Array.fill(m) {
       0
     }
 
-    val matchPairs: Array[MatchPair] = findKMatchPairs(X, Y, k)
+    val matchPairs: Array[MatchPair] = getKMatchPairs(X, Y, k)
     val events: Array[Event] = getEvents(matchPairs).sorted
 
     for (event <- events) {
       if (event.eventType == Event.START) {
-        dp(event.i)(event.j) = if (maxColDp.slice(0, event.j + 1 - 1).isEmpty) k else k + maxColDp.slice(0, event.j + 1 - 1).max
-
+        dp.put((event.i, event.j), if (maxColDp.slice(0, event.j).isEmpty) k else k + maxColDp.slice(0, event.j).max)
       }
       else if (event.eventType == Event.END) {
         // calculate start event
         val p = new Event(event.i - k, event.j - k, Event.START)
-        // END event contains exclusive indices - when indexing dp and maxColDp use i-1 and j-1
         val g: Option[Event] = getEventThatContinues(events, p)
         if (g.isDefined) {
-          dp(p.i)(p.j) = math.max(dp(p.i)(p.j), dp(g.get.i)(g.get.j) + 1)
+          dp.put((p.i, p.j), math.max(dp((p.i, p.j)), dp((g.get.i, g.get.j)) + 1))
         }
-        maxColDp(event.j - 1) = math.max(maxColDp(event.j - 1), dp(p.i)(p.j))
+        // END event contains exclusive indices - when indexing dp and maxColDp use i-1 and j-1
+        maxColDp(event.j - 1) = math.max(maxColDp(event.j - 1), dp((p.i, p.j)))
       }
     }
 
-    if (dp.flatten.length > 0)
-      dp.flatten.max
-    else
-      0
+    if (dp.values.size > 0)
+      dp.values.max
+    else 0
   }
 
   def main(args: Array[String]): Unit = {
