@@ -19,7 +19,8 @@ object DataGenerator {
       pw.write(System.lineSeparator())
       for (i <- 0 until length) {
         if (i != 0 && i % MAX_LINE_LENGTH == 0) {
-          pw.write(System.lineSeparator())
+          // file looks better, BUT reading data is SLOW for big files
+          // pw.write(System.lineSeparator())
         }
         pw.write(alphabet(random.nextInt(alphabet.length)))
       }

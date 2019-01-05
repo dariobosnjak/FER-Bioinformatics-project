@@ -25,19 +25,16 @@ object FastaReader {
     if (lineIterator.hasNext) {
       val firstLine = lineIterator.next()
       // first header
-      println("header: ", firstLine)
       headers.append(firstLine)
       // iterate through one sequence
       while (lineIterator.hasNext && !header) {
         val line = lineIterator.next()
         if (line.startsWith(",")) {
           // ignore comments
-          println("comment: ", line)
           comments.last.append(line)
         }
         else if (line.startsWith(">")) {
           // new header
-          println("header: ", line)
           newSequence = true
           // end previous sequence
           result.append(Sequence(headers.last, sequences.last, comments.last))
