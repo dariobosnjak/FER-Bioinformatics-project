@@ -1,8 +1,5 @@
 package utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  * Fenwick tree data structure.
  */
@@ -40,7 +37,7 @@ public class FenwickTree {
      * @return maximum value from subaray defined with given index.
      */
     public int getMax(int indexEnd) {
-        int res = Integer.MIN_VALUE;
+        int res = 0;//Integer.MIN_VALUE;
         while(indexEnd > 0){
             res = Math.max(res, this.tree[indexEnd]);
             indexEnd -= indexEnd & (-indexEnd);
