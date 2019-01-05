@@ -2,7 +2,8 @@
 project
 target
 build.sbt
-!/data/synthetic
-!/data/results/
-!/data/bacteria/
+!/data/synthetic/*
+!/data/results/*
+!/data/bacteria/*
+!/data/results/scala/*
 data/*
