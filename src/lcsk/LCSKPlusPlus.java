@@ -22,33 +22,59 @@ public class LCSKPlusPlus {
             System.err.println("K must be an integer.");
             System.exit(-1);
         } catch (ArrayIndexOutOfBoundsException missingArguments) {
-            System.err.println("Usage: <path to the input file> <k>");
+            System.err.println("Usage: <input file OR input directory> <k>");
             System.exit(-1);
         }
 
         ///////////////// Load input file /////////////////
-        File file = new File(pathname);
+        File filePath = new File(pathname);
         BufferedReader br = null;
 
         String x = null, y = null;
-        try {
-            br = new BufferedReader(new FileReader(file));
 
-            x = br.readLine();//"ABCDEFGH"; // "ATTATG"
-            y = br.readLine();//"ABCDEFGH"; // "CTATAGAGTA"
+        File[] directoryListing = null;
+
+        // if given pathname is a directory, extract all files in that directory
+        if (filePath.isDirectory()) {
+            directoryListing = filePath.listFiles();
+        // if given pathname is a file, store that file
+        } else if (filePath.isFile()) {
+            directoryListing = new File[]{filePath};
+        }
+        try {
+            for (File childFile : directoryListing) {
+                if(!childFile.isFile()) {
+                    continue;
+                }
+                br = new BufferedReader(new FileReader(childFile));
+
+                x = br.readLine();//"ABCDEFGH"; // "ATTATG"
+                y = br.readLine();//"ABCDEFGH"; // "CTATAGAGTA"
+
+                ///////////////// LCSk++ /////////////////
+                int result = lcskPlusPlus(x, y, k);
+                System.out.printf("Input file=%s, k=%d, result=%d\n", childFile.getName(), k, result);
+
+                ///////////////// Write results /////////////////
+                // remove file extension
+                String childName = childFile.getName().split("\\.")[0];
+                writeResults(result, childName, k);
+
+                br.close();
+            }
+
         } catch (FileNotFoundException e) {
-            System.err.println("File " + pathname + " does not exist.");
+            // this can happen if path to the single file is passed and it does not exist
+            System.err.println("File " + filePath + " does not exist.");
             System.exit(-1);
         } catch (IOException e) {
             System.err.println("Error while reading " + pathname + " file.");
             System.exit(-1);
         }
+    }
 
-        ///////////////// LCSk++ /////////////////
-        int result = lcskPlusPlus(x, y, k);
-
-        ///////////////// Write results /////////////////
-        String outputFile = "data/results/java/output.txt";
+    private static void writeResults(int result, String childFileName, int k) {
+        String outputFile = "data/results/java/input__" + childFileName + "-k__" + k + ".txt";
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(outputFile, "UTF-8");
