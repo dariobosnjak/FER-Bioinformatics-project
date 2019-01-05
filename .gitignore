@@ -3,5 +3,6 @@ project
 target
 build.sbt
 !/data/synthetic
-data/*
 !/data/results/
+!/data/bacteria/
+data/*

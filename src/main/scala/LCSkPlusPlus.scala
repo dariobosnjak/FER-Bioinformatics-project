@@ -173,7 +173,7 @@ object LCSkPlusPlus {
     val file = new File(filePath)
     val fileName = file.getName
 
-    val pw = new PrintWriter(new File("./data/results/k=" + k + "-" + fileName))
+    val pw = new PrintWriter(new File("./data/results/scala/k=" + k + "-" + fileName))
     pw.write("Similarity: " + similarity.toString)
     pw.flush()
     pw.close()
