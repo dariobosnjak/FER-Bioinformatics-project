@@ -4,3 +4,4 @@ target
 build.sbt
 !/data/synthetic
 data/*
+!/data/results/

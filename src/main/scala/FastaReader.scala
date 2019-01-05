@@ -1,50 +1,74 @@
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
+case class Sequence(header: String, sequence: String, comments: ArrayBuffer[String])
+
 object FastaReader {
-  def parseFastaFile(filePath: String): ArrayBuffer[String] = {
+  def parseFastaFile(filePath: String): Seq[Sequence] = {
     val lineIterator = Source.fromFile(filePath).getLines()
+
+    val headers: ArrayBuffer[String] = ArrayBuffer[String]()
     val sequences: ArrayBuffer[String] = ArrayBuffer[String]()
-    var i = 0
+    val comments: ArrayBuffer[ArrayBuffer[String]] = ArrayBuffer[ArrayBuffer[String]]()
+
+    // initialize
+    var seqId = 0
     sequences.append("")
+    comments.append(ArrayBuffer[String]())
 
     var header = false
     var newSequence = false
+
+    var result = ArrayBuffer[Sequence]()
 
     // iterate sequences
     if (lineIterator.hasNext) {
       val firstLine = lineIterator.next()
       // first header
       println("header: ", firstLine)
+      headers.append(firstLine)
       // iterate through one sequence
       while (lineIterator.hasNext && !header) {
         val line = lineIterator.next()
         if (line.startsWith(",")) {
           // ignore comments
           println("comment: ", line)
+          comments.last.append(line)
         }
         else if (line.startsWith(">")) {
+          // new header
           println("header: ", line)
           newSequence = true
+          // end previous sequence
+          result.append(Sequence(headers.last, sequences.last, comments.last))
+          // start a new one
+          headers.append(line)
+          comments.append(ArrayBuffer[String]())
         } else {
-          if (!newSequence)
-            sequences(i) = sequences.last ++ line
+          if (!newSequence) {
+            // continuation of a sequence
+            sequences(seqId) = sequences.last ++ line
+          }
           else {
+            // start new sequence
             sequences.append("")
-            i += 1
-            sequences(i) = sequences.last ++ line
+            seqId += 1
+            sequences(seqId) = sequences.last ++ line
             newSequence = false
           }
         }
       }
+      // append last one
+      result.append(Sequence(headers.last, sequences.last, comments.last))
     }
-    sequences
+
+    result
   }
 
 
   // DEMO
   def main(args: Array[String]): Unit = {
-    val file = "./data/proba.txt"
-    println(FastaReader.parseFastaFile(file).toList)
+    val file = "data/proba.txt"
+    FastaReader.parseFastaFile(file)
   }
 }

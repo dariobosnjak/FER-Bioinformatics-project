@@ -1,6 +1,6 @@
-import scala.collection.mutable
+import java.io.{File, PrintWriter}
+
 import scala.collection.mutable.{ArrayBuffer, HashMap => MutableHashMap}
-import scala.io.Source
 
 object LCSkPlusPlus {
 
@@ -158,6 +158,26 @@ object LCSkPlusPlus {
     else 0
   }
 
+  def runForFile(filePath: String, k: Int): Unit = {
+    // parse FASTA file
+    val sequences = FastaReader.parseFastaFile(filePath)
+    val X = sequences(0).sequence
+    val Y = sequences(1).sequence
+
+    // run LCSk++
+    println("file=" + filePath, "k=" + k)
+    val similarity = runLcskPlusPlus(X, Y, k)
+    println("Similarity: " + similarity)
+
+    // write results
+    val file = new File(filePath)
+    val fileName = file.getName
+
+    val pw = new PrintWriter(new File("./data/results/k=" + k + "-" + fileName))
+    pw.write("Similarity: " + similarity.toString)
+    pw.flush()
+    pw.close()
+  }
 
   def main(args: Array[String]): Unit = {
     if (args.length != 2) {
@@ -168,15 +188,18 @@ object LCSkPlusPlus {
     val filePath = args(0)
     val k = args(1).toInt
 
-    // parse FASTA file
-    val sequences = FastaReader.parseFastaFile(filePath)
-    val X = sequences(0)
-    val Y = sequences(1)
+    val file = new File(filePath)
 
-    println("file=" + filePath, "k=" + k)
-    val similarity = runLcskPlusPlus(X, Y, k)
-    // TODO - zapis rezultata u file - samo similarity?
-    println("Similarity: " + similarity)
+    if (file.isDirectory) {
+      // run for all files in a directory
+      for (currentFile <- file.listFiles()) {
+        runForFile(currentFile.getAbsolutePath, k)
+      }
+    } else if (file.isFile) {
+      // run for a single file
+      runForFile(filePath, k)
+    }
   }
+
 }
 
