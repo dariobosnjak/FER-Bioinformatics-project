@@ -9,16 +9,63 @@ import java.util.*;
 
 public class LCSKPlusPlus {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        // TODO load arguments
-        int k = 100;
+        ///////////////// Arguments parsing /////////////////
+        int k = 0;
+        String pathname = null;
 
-        File file = new File("input");
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String x = br.readLine();//"ABCDEFGH"; // "ATTATG"
-        String y = br.readLine();//"ABCDEFGH"; // "CTATAGAGTA"
+        try {
+            pathname = args[0];
+            k = Integer.parseInt(args[1]);
+        } catch (NumberFormatException kNotANumber) {
+            System.err.println("K must be an integer.");
+            System.exit(-1);
+        } catch (ArrayIndexOutOfBoundsException missingArguments) {
+            System.err.println("Usage: <path to the input file> <k>");
+            System.exit(-1);
+        }
 
+        ///////////////// Load input file /////////////////
+        File file = new File(pathname);
+        BufferedReader br = null;
+
+        String x = null, y = null;
+        try {
+            br = new BufferedReader(new FileReader(file));
+
+            x = br.readLine();//"ABCDEFGH"; // "ATTATG"
+            y = br.readLine();//"ABCDEFGH"; // "CTATAGAGTA"
+        } catch (FileNotFoundException e) {
+            System.err.println("File " + pathname + " does not exist.");
+            System.exit(-1);
+        } catch (IOException e) {
+            System.err.println("Error while reading " + pathname + " file.");
+            System.exit(-1);
+        }
+
+        ///////////////// LCSk++ /////////////////
+        int result = lcskPlusPlus(x, y, k);
+
+        ///////////////// Write results /////////////////
+        String outputFile = "data/results/java/output.txt";
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(outputFile, "UTF-8");
+            writer.println(result);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("Error while writing to " + outputFile + " file. Check if directory exists.");
+            writer.close();
+            System.exit(-1);
+        } finally {
+            writer.close();
+        }
+    }
+
+    private static int lcskPlusPlus(String x, String y, int k) {
         // sparse dynamic programming table, key is location in the table
         HashMap<Pair<Integer, Integer>, Integer> dp = new HashMap<>();
         FenwickTree maxColDp = new FenwickTree(y.length());
@@ -64,7 +111,7 @@ public class LCSKPlusPlus {
         if (!dp.values().isEmpty()) {
             result = Collections.max(dp.values());
         }
-        System.out.println(result);
+        return result;
     }
 
     /**
