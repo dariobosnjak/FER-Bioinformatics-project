@@ -37,7 +37,7 @@ public class LCSKPlusPlus {
         // if given pathname is a directory, extract all files in that directory
         if (filePath.isDirectory()) {
             directoryListing = filePath.listFiles();
-        // if given pathname is a file, store that file
+            // if given pathname is a file, store that file
         } else if (filePath.isFile()) {
             directoryListing = new File[]{filePath};
         }
@@ -48,8 +48,8 @@ public class LCSKPlusPlus {
                 }
                 br = new BufferedReader(new FileReader(childFile));
 
-                x = br.readLine();//"ABCDEFGH"; // "ATTATG"
-                y = br.readLine();//"ABCDEFGH"; // "CTATAGAGTA"
+                x = br.readLine().trim();//"ABCDEFGH"; // "ATTATG"
+                y = br.readLine().trim();//"ABCDEFGH"; // "CTATAGAGTA"
 
                 ///////////////// LCSk++ /////////////////
                 int result = lcskPlusPlus(x, y, k);
