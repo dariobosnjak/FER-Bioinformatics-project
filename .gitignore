@@ -2,4 +2,5 @@
 project
 target
 build.sbt
+!/data/synthetic
 data/*

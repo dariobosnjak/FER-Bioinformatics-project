@@ -1,4 +1,4 @@
-import scala.collection.Set
+import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, HashMap => MutableHashMap}
 import scala.io.Source
 
@@ -168,23 +168,15 @@ object LCSkPlusPlus {
     val filePath = args(0)
     val k = args(1).toInt
 
-    val lineIterator = Source.fromFile(filePath).getLines()
-    val X = lineIterator.next()
-    val Y = lineIterator.next()
-    /*
     // parse FASTA file
-    while (lineIterator.hasNext) {
-      if (lineIterator.next().substring(0, 1) == ">") {
+    val sequences = FastaReader.parseFastaFile(filePath)
+    val X = sequences(0)
+    val Y = sequences(1)
 
-      }
-    }*/
-
-
-    println("file=" + filePath, "k=" + k)
     println("file=" + filePath, "k=" + k)
     val similarity = runLcskPlusPlus(X, Y, k)
+    // TODO - zapis rezultata u file - samo similarity?
     println("Similarity: " + similarity)
-
   }
 }
 
