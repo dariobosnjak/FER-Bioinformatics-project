@@ -74,6 +74,10 @@ public class LCSKPlusPlus {
     }
 
     private static void writeResults(int result, String childFileName, int k) {
+        // create directories on the path to the output file
+        File directory = new File("data/results/java");
+        directory.mkdirs();
+
         String outputFile = "data/results/java/input__" + childFileName + "-k__" + k + ".txt";
         PrintWriter writer = null;
         try {
