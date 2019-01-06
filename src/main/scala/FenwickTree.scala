@@ -1,3 +1,10 @@
+/**
+  * Fenwick tree implementation for fast range maximum queries.
+  *
+  * @param capacity number of elements in a tree
+  *
+  * Dario Bosnjak
+  */
 class FenwickTree(capacity: Int) {
   private val _tree: Array[(Int, Event)] = Array.fill(capacity + 1) {
     (0, new Event(-1, -1, Event.START))
@@ -30,6 +37,13 @@ class FenwickTree(capacity: Int) {
     max
   }
 
+  /**
+    * Updates the j-th element with a new value.
+    *
+    * @param j element index to update
+    * @param newValue new value
+    * @param parentNode parent of the j-th element
+    */
   def update(j: Int, newValue: Int, parentNode: Event): Unit = {
     var i = j + 1
     while (i < length) {

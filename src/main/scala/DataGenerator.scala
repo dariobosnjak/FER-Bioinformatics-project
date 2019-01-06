@@ -2,6 +2,11 @@ import java.io._
 
 import scala.util.Random
 
+/**
+  * Generates two random sequences of characters: A, C, G, T.
+  * Only argument is a file path where sequences are stored.
+  * Dario Bosnjak
+  */
 object DataGenerator {
   val MAX_LINE_LENGTH = 80
 

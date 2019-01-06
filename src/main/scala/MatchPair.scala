@@ -3,6 +3,8 @@
   *
   * @param _startEvent an event that defines the start of the match pair
   * @param _endEvent   an event that defines the end of the match pair
+  *
+  * Dario Bosnjak
   */
 class MatchPair(_startEvent: Event, _endEvent: Event) {
   def startEvent: Event = _startEvent

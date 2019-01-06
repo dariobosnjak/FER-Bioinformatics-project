@@ -2,6 +2,10 @@ import java.io.{File, PrintWriter}
 
 import scala.collection.mutable.{ArrayBuffer, HashMap => MutableHashMap}
 
+/**
+  * LCSk++ implementation and main method.
+  * Dario Bosnjak
+  */
 object LCSkPlusPlus {
 
   /**
@@ -12,7 +16,7 @@ object LCSkPlusPlus {
     * @param j starting index in Y
     * @return true if the (i, j) is a match pair, false otherwise
     */
-  def isKMatchPair(X: String, Y: String, i: Int, j: Int, k: Int): Boolean = {
+  private def isKMatchPair(X: String, Y: String, i: Int, j: Int, k: Int): Boolean = {
     var result = true
     // conditioned for loop - on first difference break the loop
     for (f <- 0 until k if result) {
@@ -51,7 +55,7 @@ object LCSkPlusPlus {
     *
     * @return array of Int tuples - starting indices in X and Y of each match pair
     */
-  def getKMatchPairs(X: String, Y: String, k: Int): Array[MatchPair] = {
+  private def getKMatchPairs(X: String, Y: String, k: Int): Array[MatchPair] = {
     val n = X.length
     val m = Y.length
     val freeMem = java.lang.Runtime.getRuntime
@@ -83,7 +87,7 @@ object LCSkPlusPlus {
     * @param matchPairs match pairs to process
     * @return start and end events
     */
-  def getEvents(matchPairs: Array[MatchPair]): Array[Event] = {
+  private def getEvents(matchPairs: Array[MatchPair]): Array[Event] = {
     val events: ArrayBuffer[Event] = ArrayBuffer[Event]()
     for (matchPair <- matchPairs) {
       events.append(
@@ -102,7 +106,7 @@ object LCSkPlusPlus {
     * @param event  event that continues some event from events array
     * @return Option[Event] - if event is found it is defined, otherwise it is empty
     */
-  def getEventThatContinues(events: Array[Event], event: Event): Option[Event] = {
+  private def getEventThatContinues(events: Array[Event], event: Event): Option[Event] = {
     var notFound = true
     var g: Event = new Event(event.i - 1, event.j - 1, Event.START)
 
@@ -124,6 +128,14 @@ object LCSkPlusPlus {
     if (notFound) Option[Event](null) else Option[Event](g)
   }
 
+  /**
+    * Runs LCSk++ algorithm for two strings. Returns a similarity between strings.
+    *
+    * @param X first string
+    * @param Y second string
+    * @param k parameter k
+    * @return similarity between X and Y
+    */
   def runLcskPlusPlus(X: String, Y: String, k: Int): Int = {
     val n = X.length
     val m = Y.length
@@ -180,6 +192,16 @@ object LCSkPlusPlus {
     pw.close()
   }
 
+  private def validatePaths(filePath: String, outputFilePath: String): Boolean = {
+    val file = new File(filePath)
+    val outputFile = new File(outputFilePath)
+
+    if (!((file.isDirectory || file.isFile) && outputFile.isDirectory)) {
+      false
+    }
+    true
+  }
+
   def main(args: Array[String]): Unit = {
     if (args.length != 3) {
       println("ERROR - 3 arguments required: file path, k, output folder path")
@@ -188,18 +210,22 @@ object LCSkPlusPlus {
 
     val filePath = args(0)
     val k = args(1).toInt
-    val resultsPath = args(2)
+    val outputFilePath = args(2)
+
+    if (!validatePaths(filePath, outputFilePath)) {
+      println("File paths not valid")
+      sys.exit(-1)
+    }
 
     val file = new File(filePath)
-
     if (file.isDirectory) {
       // run for all files in a directory
       for (currentFile <- file.listFiles()) {
-        runForFile(currentFile.getAbsolutePath, k, resultsPath)
+        runForFile(currentFile.getAbsolutePath, k, outputFilePath)
       }
     } else if (file.isFile) {
       // run for a single file
-      runForFile(filePath, k, resultsPath)
+      runForFile(filePath, k, outputFilePath)
     }
   }
 

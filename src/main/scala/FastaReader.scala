@@ -1,8 +1,24 @@
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
+/**
+  * Represents one sequence in FASTA file.
+  *
+  * @param header sequence ID/name
+  * @param sequence sequence of characters
+  * @param comments comments
+  */
 case class Sequence(header: String, sequence: String, comments: ArrayBuffer[String])
 
+/**
+  * Reads FASTA files and returns a collection of Sequence instances.
+  * FASTA file format:
+  *   > sequence ID
+  *   sequence in one or more lines
+  *   , comment
+  *
+  * Dario Bosnjak.
+  */
 object FastaReader {
   def parseFastaFile(filePath: String): Seq[Sequence] = {
     val lineIterator = Source.fromFile(filePath).getLines()

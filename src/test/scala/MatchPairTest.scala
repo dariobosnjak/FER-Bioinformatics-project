@@ -1,5 +1,9 @@
 import org.scalatest.FlatSpec
 
+/**
+  * MachPair test class
+  * Dario Bosnjak
+  */
 class MatchPairTest extends FlatSpec {
   "A MatchPair P" must "continue MatchPair G" in {
     val k = 3

@@ -1,5 +1,9 @@
 import org.scalatest.FlatSpec
 
+/**
+  * Event test class
+  * Dario Bosnjak
+  */
 class EventTest extends FlatSpec{
   "An Event (1,2)" must "be smaller than Event (1,3)" in {
     val p = new Event(1,2, Event.START)
