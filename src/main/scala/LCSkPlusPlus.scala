@@ -158,7 +158,8 @@ object LCSkPlusPlus {
     else 0
   }
 
-  def runForFile(filePath: String, k: Int): Unit = {
+
+  private def runForFile(filePath: String, k: Int, resultsPath: String): Unit = {
     // parse FASTA file
     val sequences = FastaReader.parseFastaFile(filePath)
     val X = sequences(0).sequence
@@ -173,31 +174,32 @@ object LCSkPlusPlus {
     val file = new File(filePath)
     val fileName = file.getName
 
-    val pw = new PrintWriter(new File("./data/results/scala/k=" + k + "-" + fileName))
+    val pw = new PrintWriter(new File(resultsPath + "/k=" + k + "-" + fileName))
     pw.write("Similarity: " + similarity.toString)
     pw.flush()
     pw.close()
   }
 
   def main(args: Array[String]): Unit = {
-    if (args.length != 2) {
-      println("ERROR - 2 arguments required: file path, k")
+    if (args.length != 3) {
+      println("ERROR - 3 arguments required: file path, k, output folder path")
       sys.exit(-1)
     }
 
     val filePath = args(0)
     val k = args(1).toInt
+    val resultsPath = args(2)
 
     val file = new File(filePath)
 
     if (file.isDirectory) {
       // run for all files in a directory
       for (currentFile <- file.listFiles()) {
-        runForFile(currentFile.getAbsolutePath, k)
+        runForFile(currentFile.getAbsolutePath, k, resultsPath)
       }
     } else if (file.isFile) {
       // run for a single file
-      runForFile(filePath, k)
+      runForFile(filePath, k, resultsPath)
     }
   }
 
