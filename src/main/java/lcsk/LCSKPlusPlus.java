@@ -105,8 +105,8 @@ class LCSKPlusPlus {
         File directory = new File("data/results/java");
         directory.mkdirs();
 
-        String saveDirectoryLocation = "data/results/java/input__";
-        String outputFile = saveDirectoryLocation + childFileName + "-k__" + k + ".txt";
+        String saveDirectoryLocation = "data/results/java/";
+        String outputFile = saveDirectoryLocation + childFileName + "-" + k + ".txt";
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(outputFile, "UTF-8");
