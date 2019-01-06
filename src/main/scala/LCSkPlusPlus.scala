@@ -192,12 +192,10 @@ object LCSkPlusPlus {
     pw.close()
   }
 
-  private def validatePaths(filePath: String, outputFilePath: String): Boolean = {
+  private def validatePath(filePath: String): Boolean = {
     val file = new File(filePath)
-    val outputFile = new File(outputFilePath)
-
-    if (!((file.isDirectory || file.isFile) && outputFile.isDirectory)) {
-      false
+    if (!(file.isDirectory || file.isFile)) {
+      return false
     }
     true
   }
@@ -210,22 +208,29 @@ object LCSkPlusPlus {
 
     val filePath = args(0)
     val k = args(1).toInt
-    val outputFilePath = args(2)
+    val outputDirPath = args(2)
 
-    if (!validatePaths(filePath, outputFilePath)) {
-      println("File paths not valid")
+    if (!validatePath(filePath)) {
+      println("Input file/directory path is not valid")
       sys.exit(-1)
+    }
+
+    // create output directory if it does not exist
+    val outputDir = new File(outputDirPath)
+    if (!outputDir.exists()) {
+      println("Directory " + outputDir.getAbsolutePath + " created")
+      outputDir.mkdirs()
     }
 
     val file = new File(filePath)
     if (file.isDirectory) {
       // run for all files in a directory
       for (currentFile <- file.listFiles()) {
-        runForFile(currentFile.getAbsolutePath, k, outputFilePath)
+        runForFile(currentFile.getAbsolutePath, k, outputDirPath)
       }
     } else if (file.isFile) {
       // run for a single file
-      runForFile(filePath, k, outputFilePath)
+      runForFile(filePath, k, outputDirPath)
     }
   }
 
