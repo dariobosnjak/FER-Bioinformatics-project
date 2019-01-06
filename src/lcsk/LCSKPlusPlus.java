@@ -40,10 +40,14 @@ public class LCSKPlusPlus {
             // if given pathname is a file, store that file
         } else if (filePath.isFile()) {
             directoryListing = new File[]{filePath};
+        } else {
+            // given pathname does not exist - terminate
+            System.err.println("Given path " + filePath + " does not exist.");
+            System.exit(-1);
         }
         try {
             for (File childFile : directoryListing) {
-                if(!childFile.isFile()) {
+                if (!childFile.isFile()) {
                     continue;
                 }
                 br = new BufferedReader(new FileReader(childFile));
@@ -95,6 +99,7 @@ public class LCSKPlusPlus {
         }
     }
 
+    // LCSk ++ algorithm
     private static int lcskPlusPlus(String x, String y, int k) {
         // sparse dynamic programming table, key is location in the table
         HashMap<Pair<Integer, Integer>, Integer> dp = new HashMap<>();
@@ -155,7 +160,7 @@ public class LCSKPlusPlus {
 
         int ig = ip - 1;
         int jg = -(ip - jp - ig);
-        Event g = new Event(new Pair<Integer, Integer>(ig, jg), Event.EventType.START);
+        Event g = new Event(new Pair<>(ig, jg), Event.EventType.START);
 
         RowMajorEventComparator rmec = new RowMajorEventComparator();
         BinarySearch<Event> bs = new BinarySearch<>(rmec);
@@ -305,7 +310,7 @@ public class LCSKPlusPlus {
         // if key does not exist, create new map entry
         kGramMapX.computeIfAbsent(hash, k1 -> new ArrayList<>());
         // this kGram with hashcode "hash" starts at index 0 for string X (starting index for Y is unknown for now)
-        kGramMapX.get(hash).add(new Pair<Integer, Integer>(0, null));
+        kGramMapX.get(hash).add(new Pair<>(0, null));
 
         // calculate hash for other kGrams
         for (int startX = 1; startX < x.length() - (k - 1); startX++) {
@@ -396,7 +401,7 @@ public class LCSKPlusPlus {
                 kGramMap.get(kGram).add(new Pair<>(start, end));
             } else {
                 // if key does not exists -> create new arraylist and append pair
-                kGramMap.put(kGram, new ArrayList<Pair<Integer, Integer>>());
+                kGramMap.put(kGram, new ArrayList<>());
                 kGramMap.get(kGram).add(new Pair<>(start, end));
             }
         }
