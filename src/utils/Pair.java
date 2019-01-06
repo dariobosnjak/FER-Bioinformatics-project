@@ -6,6 +6,8 @@ import java.util.Objects;
  * Represents a pair or 2-tuple object.
  * @param <X> object type for the first element of the pair
  * @param <Y> object type for the second element of the pair
+
+ * @author Renato Bosnjak
  */
 public class Pair<X, Y> {
     private X firstElement;

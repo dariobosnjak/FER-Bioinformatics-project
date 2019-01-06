@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Parser for fasta files.
+ *
+ * @author Renato Bosnjak
  */
 public class FastaParser {
     /**

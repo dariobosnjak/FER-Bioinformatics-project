@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * Driver class.
+ *
+ * @author Renato Bosnjak
  */
 class LCSKPlusPlus {
 

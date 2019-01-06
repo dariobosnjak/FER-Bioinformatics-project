@@ -5,6 +5,8 @@ import java.util.Objects;
 
 /**
  * Event object representation. Holds a pair which represents the start or the end of the k-match.
+ *
+ * @author Renato Bosnjak
  */
 public class Event {
     enum EventType {

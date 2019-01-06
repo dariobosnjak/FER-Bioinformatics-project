@@ -6,6 +6,8 @@ import java.util.Comparator;
 /**
  * Represents object which performs binary search using given comparator.
  * @param <T> type of objects which will be searched
+ *
+ * @author Renato Bosnjak
  */
 public class BinarySearch<T> {
 

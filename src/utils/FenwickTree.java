@@ -2,6 +2,8 @@ package utils;
 
 /**
  * Fenwick tree data structure.
+ *
+ * @author Renato Bosnjak
  */
 public class FenwickTree {
 
