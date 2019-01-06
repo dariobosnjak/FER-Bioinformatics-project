@@ -4,9 +4,18 @@ import java.util.Comparator;
 
 /**
  * Comparator for Event objects. Uses row-major ordering.
- * If passed events have same pairs and events have different types, one with END type will be less than other with START.
+ * If passed events have the same pairs and events have different types, one with END type will be less than other with START.
  */
 class RowMajorEventComparator implements Comparator<Event> {
+    /**
+     * Comapres two passed objects using row-major ordering.
+     * If passed events have the same pairs and events have different types, one with END type will be less than other with START.
+     * @param o1 first event
+     * @param o2 second event
+     * @return 0 if the objects are equal,
+     *          -1 if the first object is less than the second object,
+     *          +1 if the first object is greater than the second object.
+     */
     @Override
     public int compare(Event o1, Event o2) {
         if (o2 == null) throw new NullPointerException();

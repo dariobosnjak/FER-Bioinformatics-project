@@ -11,8 +11,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Driver class.
+ */
 class LCSKPlusPlus {
 
+    /**
+     * Driver method. Saves the results in data/results/java/.
+     * @param args input path and k value. Input path can be path to the fasta file or directory which contains many fasta
+     *             files. In the second case, LCSk++ will be calculated for all files in that directory.
+     */
     public static void main(String[] args) {
 
         ///////////////// Arguments parsing /////////////////
@@ -84,12 +92,19 @@ class LCSKPlusPlus {
         }
     }
 
+    /**
+     * Writes results to the file in directory data/results/java/.
+     * @param result results to save
+     * @param childFileName used for generating filename
+     * @param k used for generating filename
+     */
     private static void writeResults(int result, String childFileName, int k) {
         // create directories on the path to the output file
         File directory = new File("data/results/java");
         directory.mkdirs();
 
-        String outputFile = "data/results/java/input__" + childFileName + "-k__" + k + ".txt";
+        String saveDirectoryLocation = "data/results/java/input__";
+        String outputFile = saveDirectoryLocation + childFileName + "-k__" + k + ".txt";
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(outputFile, "UTF-8");
@@ -218,6 +233,8 @@ class LCSKPlusPlus {
 
     /**
      * Finds all k-match pairs between x and y sequence.
+     * Method is naive which means that it first finds all k-grams in sequence x, then iterates over all k-grams in
+     * sequence y and checks if the current k-gram was seen in sequence x.
      *
      * @param x string
      * @param y string
@@ -248,6 +265,7 @@ class LCSKPlusPlus {
 
     /**
      * Finds all k-match pairs between x and y sequence.
+     * Method is similar to naive version but uses simple hashcode for lower memory consumption.
      *
      * @param x string
      * @param y string
@@ -282,14 +300,16 @@ class LCSKPlusPlus {
     }
 
     /**
+     * Experimental - do not use for bigger k values.
      * Finds all k-match pairs between x and y sequence.
+     * Method is similar to naive version but uses Rabin fingerprint for lower memory consumption.
      *
      * @param x string
      * @param y string
      * @param k match length
      * @return all k-match pairs between x and y
      */
-    // TODO for bigger k values -> overflow
+    // TODO bigger k value causes overflow
     private static ArrayList<MatchPair> findAllKMatchPairsRabinKarpSearch(String x, String y, int k) {
         ArrayList<MatchPair> matchPairs2 = new ArrayList<>();
 
@@ -435,14 +455,26 @@ class LCSKPlusPlus {
             this.length = end.getFirstElement() - start.getFirstElement();
         }
 
+        /**
+         * Length getter.
+         * @return length of this match pair defined as number of characters
+         */
         public int getLength() {
             return length;
         }
 
+        /**
+         * Start getter.
+         * @return pair which represents starting location of this match pair.
+         */
         public Pair<Integer, Integer> getStart() {
             return start;
         }
 
+        /**
+         * End getter.
+         * @return pair which represents ending location of this match pair.
+         */
         public Pair<Integer, Integer> getEnd() {
             return end;
         }

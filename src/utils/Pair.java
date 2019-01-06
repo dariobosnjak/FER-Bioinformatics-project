@@ -37,14 +37,6 @@ public class Pair<X, Y> {
         return secondElement;
     }
 
-    public void setFirstElement(X firstElement) {
-        this.firstElement = firstElement;
-    }
-
-    public void setSecondElement(Y secondElement) {
-        this.secondElement = secondElement;
-    }
-
     @Override
     public String toString() {
         return "Pair(" +

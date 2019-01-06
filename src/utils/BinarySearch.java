@@ -3,10 +3,18 @@ package utils;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * Represents object which performs binary search using given comparator.
+ * @param <T> type of objects which will be searched
+ */
 public class BinarySearch<T> {
 
     private final Comparator<T> comparator;
 
+    /**
+     * Creates new binary search object.
+     * @param comparator comparator that will be used for comparison in the binary search
+     */
     public BinarySearch(Comparator<T> comparator) {
         this.comparator = comparator;
     }
