@@ -30,10 +30,6 @@ class LCSKPlusPlusTest {
     }
 
 
-    @org.junit.jupiter.api.AfterEach
-    void tearDown() {
-    }
-
     @org.junit.jupiter.api.Test
     void main() {
         Pair<Integer, Integer> p1 = new Pair<>(3, 5);
@@ -52,6 +48,10 @@ class LCSKPlusPlusTest {
     void findAllKMatchPairsNaiveSearch() {
         ArrayList<LCSKPlusPlus.MatchPair> matchPairs = LCSKPlusPlus.findAllKMatchPairsNaiveSearch(x, y, k);
 
+        checkKMatchPairsSearchResults(matchPairs);
+    }
+
+    private void checkKMatchPairsSearchResults(ArrayList<LCSKPlusPlus.MatchPair> matchPairs) {
         for (LCSKPlusPlus.MatchPair m : matchPairs) {
             Pair<Integer, Integer> mStart = m.getStart();
             Pair<Integer, Integer> mEnd = m.getEnd();
@@ -70,16 +70,6 @@ class LCSKPlusPlusTest {
 
         ArrayList<LCSKPlusPlus.MatchPair> matchPairs = LCSKPlusPlus.findAllKMatchPairsSimpleHashSearch(x, y, k);
 
-        for (LCSKPlusPlus.MatchPair m : matchPairs) {
-            Pair<Integer, Integer> mStart = m.getStart();
-            Pair<Integer, Integer> mEnd = m.getEnd();
-
-            String xSubstring = x.substring(mStart.getFirstElement(), mEnd.getFirstElement());
-            String ySubstring = y.substring(mStart.getSecondElement(), mEnd.getSecondElement());
-
-            System.out.println(m + " substringX=" + xSubstring + " substringY=" + ySubstring);
-
-            assertEquals(xSubstring, ySubstring);
-        }
+        checkKMatchPairsSearchResults(matchPairs);
     }
 }

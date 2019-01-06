@@ -6,7 +6,7 @@ import java.util.Comparator;
  * Comparator for Event objects. Uses row-major ordering.
  * If passed events have same pairs and events have different types, one with END type will be less than other with START.
  */
-public class RowMajorEventComparator implements Comparator<Event> {
+class RowMajorEventComparator implements Comparator<Event> {
     @Override
     public int compare(Event o1, Event o2) {
         if (o2 == null) throw new NullPointerException();

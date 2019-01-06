@@ -5,7 +5,7 @@ package utils;
  */
 public class FenwickTree {
 
-    int[] tree;
+    private final int[] tree;
 
     /**
      * Creates new FenwickTree object.

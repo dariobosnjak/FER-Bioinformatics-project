@@ -7,7 +7,7 @@ import utils.Pair;
 import java.io.*;
 import java.util.*;
 
-public class LCSKPlusPlus {
+class LCSKPlusPlus {
 
     public static void main(String[] args) {
 
@@ -28,9 +28,9 @@ public class LCSKPlusPlus {
 
         ///////////////// Load input file /////////////////
         File filePath = new File(pathname);
-        BufferedReader br = null;
+        BufferedReader br;
 
-        String x = null, y = null;
+        String x, y;
 
         File[] directoryListing = null;
 
@@ -218,19 +218,13 @@ public class LCSKPlusPlus {
      * @return all k-match pairs between x and y
      */
     static ArrayList<MatchPair> findAllKMatchPairsNaiveSearch(String x, String y, int k) {
-
         ArrayList<MatchPair> matchPairs = new ArrayList<>();
-
-        // contains all k-grams from string sequence
-        ArrayList<String> kGramsX = new ArrayList<>();
-        ArrayList<String> kGramsY = new ArrayList<>();
 
         // keys are k-grams from string sequence, values are utils.Pair objects which represent the beginning and the end
         // (indexes)of the k-gram
         HashMap<String, ArrayList<Pair<Integer, Integer>>> xMap = initializeKGramMap(x, k);
 
         // intersection (keep only items which appear in both maps as keys (k-grams))
-        Set<String> keysIntersection = new TreeSet<>(xMap.keySet());
         for (int yStart = 0; yStart < y.length() - (k - 1); yStart++) {
             // check if xMap contains this kGram
             if (xMap.containsKey(y.substring(yStart, yStart + k))) {
@@ -400,7 +394,7 @@ public class LCSKPlusPlus {
             if (kGramMap.get(kGram) != null) {
                 kGramMap.get(kGram).add(new Pair<>(start, end));
             } else {
-                // if key does not exists -> create new arraylist and append pair
+                // if key does not exists -> create new array list and append pair
                 kGramMap.put(kGram, new ArrayList<>());
                 kGramMap.get(kGram).add(new Pair<>(start, end));
             }
@@ -413,9 +407,9 @@ public class LCSKPlusPlus {
      * Represents one match pair.
      */
     static class MatchPair {
-        private int length;
-        private Pair<Integer, Integer> start;
-        private Pair<Integer, Integer> end;
+        private final int length;
+        private final Pair<Integer, Integer> start;
+        private final Pair<Integer, Integer> end;
 
         /**
          * Constructs new MatchPair object.
@@ -428,7 +422,7 @@ public class LCSKPlusPlus {
          *              the second string sequence. Indexes are exclusive.
          *              Example: X="abcDEFkj", Y="DEFghi". One match pair of length 3 would be start=(3,0), end=(6,3).
          */
-        public MatchPair(Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
+        MatchPair(Pair<Integer, Integer> start, Pair<Integer, Integer> end) {
             this.start = start;
             this.end = end;
             this.length = end.getFirstElement() - start.getFirstElement();

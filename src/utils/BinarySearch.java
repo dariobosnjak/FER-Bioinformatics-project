@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 public class BinarySearch<T> {
 
-    private Comparator<T> comparator;
+    private final Comparator<T> comparator;
 
     public BinarySearch(Comparator<T> comparator) {
         this.comparator = comparator;

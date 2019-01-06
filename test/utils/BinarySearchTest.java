@@ -4,16 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BinarySearchTest {
 
-    BinarySearch<Integer> bs;
-    ArrayList<Integer> arr;
+    private BinarySearch<Integer> bs;
+    private ArrayList<Integer> arr;
 
     @BeforeEach
     void setUp() {

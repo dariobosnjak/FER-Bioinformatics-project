@@ -8,7 +8,7 @@ import java.util.Objects;
  */
 public class Event {
     enum EventType {
-        START, END;
+        START, END
     }
 
     private Pair<Integer, Integer> pair;
