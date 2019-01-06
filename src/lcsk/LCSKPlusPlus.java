@@ -1,11 +1,15 @@
 package lcsk;
 
 import utils.BinarySearch;
+import utils.FastaParser;
 import utils.FenwickTree;
 import utils.Pair;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 class LCSKPlusPlus {
 
@@ -30,6 +34,7 @@ class LCSKPlusPlus {
         File filePath = new File(pathname);
         BufferedReader br;
 
+        List<String> xAndY;
         String x, y;
 
         File[] directoryListing = null;
@@ -52,8 +57,10 @@ class LCSKPlusPlus {
                 }
                 br = new BufferedReader(new FileReader(childFile));
 
-                x = br.readLine().trim();//"ABCDEFGH"; // "ATTATG"
-                y = br.readLine().trim();//"ABCDEFGH"; // "CTATAGAGTA"
+                xAndY = FastaParser.parse(childFile);
+
+                x = xAndY.get(0);
+                y = xAndY.get(1);
 
                 ///////////////// LCSk++ /////////////////
                 int result = lcskPlusPlus(x, y, k);
