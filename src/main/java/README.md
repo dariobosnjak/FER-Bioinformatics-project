@@ -19,12 +19,12 @@ Implementation of research paper [*LCSk*++: Practical similarity metric for long
     * arguments:
         * `<input_file>` can be a single FASTA file or a folder with one or multiple FASTA files
         * `<k>` must be a positive integer
-6. View results in `FER-Bioinformatics-project\data\results\java` directory
+6. View results in `FER-Bioinformatics-project/data/results/java` directory
 
 ### Test
 1. Open terminal in `FER-Bioinformatics-project` directory
 2. Run: `java -classpath bin/ lcsk.LCSKPlusPlus data/demo/sequence.fasta 10`
-3. View results in `FER-Bioinformatics-project\data\results\java` directory
+3. View results in `FER-Bioinformatics-project/data/results/java` directory
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
