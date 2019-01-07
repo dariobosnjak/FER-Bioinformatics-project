@@ -69,7 +69,7 @@ object LCSkPlusPlus {
     for (j <- 0 until m if j + k <= m) {
       val hash = Y.substring(j, j + k).hashCode
       if (xSubstringStartIndices.get(hash).isDefined) {
-        // because of hash function it is maybe same substring
+        // substring of x is maybe the same as substring of y - because of hash function
         for (xStartIndex <- xSubstringStartIndices(hash)) {
           if (X.substring(xStartIndex, xStartIndex + k) == Y.substring(j, j + k)) {
             // if substrings are the same
