@@ -1,4 +1,4 @@
-from matea_1 import find_matches
+from match_pairs import find_matches
 from fenwick_tree import Fenwick_tree
 
 

@@ -44,6 +44,7 @@ def find_substring_start_in_string_2_test(substring, string_2,indices_list):
 def create_start_end_indices_map(map_of_substrings,string_1,string_2,substring_start_indices,substring_end_indices,k,number_of_pairs,all_indices):
     for substring in map_of_substrings:
         indices_list=[]
+        #check if there is a specific substring in string_2
         position=find_substring_start_in_string_2_test(map_of_substrings[substring],string_2,indices_list)
         for position in indices_list:
             if  position!=-1:
@@ -54,6 +55,7 @@ def create_start_end_indices_map(map_of_substrings,string_1,string_2,substring_s
 
     for substring in substring_start_indices:
         #print (substring[0])
+        #if there is substring that is < len(k) do not append it to list
         if substring[0]+k <= len(string_1) and substring[1]+k<=len(string_2):
             all_indices.append((substring[0],substring[1],"start"))
             substring_end_indices.append((substring[0]+k,substring[1]+k,"end"))

@@ -39,17 +39,4 @@ class Fenwick_tree(object):
             i+=(self.LSB(i))
             #we calculate the next index by adding the least significant one
 
-if __name__ == '__main__':
-    #tests for the Fenwick tree structure
-    ft=Fenwick_tree(5)
-    ft.update(3,5)
-    for i in range(0,5):
-        print (ft.get(i))
-    print ("Update")
-    ft.update(2,4)
-    for i in range(0,5):
-        print (ft.get(i))
-    print ("Update")
-    ft.update(1,6)
-    for i in range(0,5):
-        print (ft.get(i))
+#test:
