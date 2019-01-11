@@ -1,5 +1,7 @@
-export default class LCSKPlusPlus {
-  public static run(seqA: string, seqB: string, k: number): number {
-    return 42;
-  }
+import { matchPairs } from "./matchPairs";
+
+export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
+  const mPairs = matchPairs(seqA, seqB, k);
+  console.log(mPairs);
+  return 42;
 }
