@@ -29,20 +29,8 @@ public:
 
 	int lobit(int x) { return x & -x; }
 
-	int querySumFenwick(int x) {
-		x++;
-		int sum = 0;
-		for (; x > 0; x -= lobit(x)) sum += F[x];
-		return sum;
-	}
-
-	void updateSumFenwick(int x, int add, int n) {
-		x++; n++;
-		for (; x <= n; x += lobit(x)) F[x] += add;
-	}
-
 	int queryExactElement(int x) {
-		return querySumFenwick(x) - querySumFenwick(x - 1);
+		return F[x + 1];
 	}
 
 	int queryMaxFenwick(int x) {
@@ -52,9 +40,10 @@ public:
 		return ret;
 	}
 
-	void updateMaxFenwick(int x, int value, int n) {
+	void updateFenwick(int x, int value, int n) {
 		x++; n++;
-		for (; x <= n; x += lobit(x)) F[x] = std::max(G[x], value);
+		F[x] = value;
+		for (; x <= n; x += lobit(x)) G[x] = std::max(G[x], value);
 	}
 
 	std::vector<int> F;

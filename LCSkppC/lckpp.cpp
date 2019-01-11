@@ -4,40 +4,44 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cassert>
 
 int LCKPP::run(int k, std::string s1, std::string s2) {
 	int solution = 0;
 
 	initFenwick(s2.size());
 
-	std::unordered_map<std::pair<int, int>, int, pair_hash> dp;
+	std::unordered_map<std::pair<int, int>, int, pair_hash> dp;  //da li ovo mora da bude hash?
 	
 	std::vector<int> maxColDp;
 	for (int i = 0; i <= s2.size(); ++i) {
 		maxColDp.push_back(0);
 	}
-
+	std::cout << "Kreiram matcheve" << std::endl;
 	std::unordered_map<std::string, std::vector<int>> kStrPositions;
-	for (int i = 0; i <= s1.size() - k; ++i) {
+	for (int i = 0; i <= s1.size() - k; ++i) { //mozda je  <=
 		std::string kStr = s1.substr(i, k); // od pozicije i uzimamo iducih k slova
 		kStrPositions[kStr].push_back(i); // stavljamo u mapu pod kljuèem kStr na kraj 
 	}
 
 	std::vector<std::pair<int, int>> kMatchesStart, kMatchesEnd;
-	for (int i = 0; i <= s2.size() - k; ++i) {
+	for (int i = 0; i <= s2.size() - k; ++i) { //mozda je  <=
 		std::string kStr = s2.substr(i, k);
 		for (int position : kStrPositions[kStr]) {
 			kMatchesStart.push_back({ position, i });     //nalazimo par u s2 i stavljamo u par
 			kMatchesEnd.push_back({ position + k, i + k });
-			std::cout << "Novi k match: (" << position << ", " << i << ")" << std::endl;
+			//std::cout << "Novi k match: (" << position << ", " << i << ")" << std::endl;
 		}
 	}
+	std::cout << "imam matcheve, idemo dalje" << std::endl;
 
 	// SORTIRANJE
 	// {1,2} {0, 10} {5, 3}  ===> {0, 10}, {1, 2}, {5, 3}
 	std::sort(kMatchesStart.begin(), kMatchesStart.end());
 	//{3,13}, {4,5}, {8,6}
 	std::sort(kMatchesEnd.begin(), kMatchesEnd.end());
+
+	std::cout << "sortirano" << std::endl;
 
 	int p1 = 0, p2 = 0;
 	while (p1 < kMatchesStart.size() && p2 < kMatchesEnd.size()) {
@@ -69,13 +73,14 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 			// dp(P)   k + maxx20:::jP MaxColDp(x)
 			int ip = event.first;
 			int jp = event.second;
-			//int maks = queryMaxFenwick(jp);
-			
-			int maks = -1;
+			int maks = queryMaxFenwick(jp);
+			/*
+			int m1 = -1;
 			for (int i = 0; i <= jp; ++i) {               // jel lik zabrijo u PDFu? meni radi s <=!
-				maks = std::max(maks, maxColDp[i]);
+				m1 = std::max(m1, maxColDp[i]);
 			}
 			
+			assert(m1 == maks);*/
 			dp[{ip, jp}] = maks + k;
 			solution = std::max(solution, dp[{ip, jp}]);
 		}
@@ -103,8 +108,8 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 
 
 			//updateSumFenwick(jp + k, std::max(maxColDp[jp + k], dp[{ip, jp}]), s2.size());
-			//updateMaxFenwick(jp + k, std::max(queryExactElement(jp + k), dp[{ip, jp}]), s2.size());
-			maxColDp[jp + k] = std::max(maxColDp[jp + k], dp[{ip, jp}]);
+			updateFenwick(jp + k, std::max(queryExactElement(jp + k), dp[{ip, jp}]), s2.size());
+			//maxColDp[jp + k] = std::max(maxColDp[jp + k], dp[{ip, jp}]);
 		}
 	}
 	return solution;
