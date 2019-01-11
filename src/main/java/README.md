@@ -5,13 +5,18 @@ Implementation of research paper [*LCSk*++: Practical similarity metric for long
 
 ## Getting Started
 
-### Prerequisites
+### 1. Prerequisites
 * Java 8
 
-### Installing
+### 2. Installing
+#### 2.1 Javac
+1. Open terminal 
+2. Run `apt-get update`
+3. Run `apt-get install default-jdk` or `apt-get install openjdk-8-jdk` if Java 8 is not default.
+#### 2.2 Compile & Run
 1. Clone or download this repository
 2. Open terminal in `FER-Bioinformatics-project` directory
-3. Create directory `FER-Bioinformatics-project/bin`
+3. Create directory `bin` with `mkdir bin`
 4. Compile code with the following command:
 `javac -d bin -cp src/main/java/ src/main/java/lcsk/LCSKPlusPlus.java`
 5. Run code with the following command:
@@ -21,7 +26,7 @@ Implementation of research paper [*LCSk*++: Practical similarity metric for long
         * `<k>` must be a positive integer
 6. View results in `FER-Bioinformatics-project/data/results/java` directory
 
-### Test
+### 3. Test
 1. Open terminal in `FER-Bioinformatics-project` directory
 2. Run: `java -classpath bin/ lcsk.LCSKPlusPlus data/demo/sequence.fasta 10`
 3. View results in `FER-Bioinformatics-project/data/results/java` directory
