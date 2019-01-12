@@ -7,6 +7,8 @@ import Event.EventType
   * @param _i         index in the first string
   * @param _j         index in the second string
   * @param _eventType START or END, if END indices i,j are exclusive
+  *
+  * @author Dario Bosnjak
   */
 class Event(_i: Int, _j: Int, _eventType: EventType) extends Ordered[Event] {
   def i: Int = _i

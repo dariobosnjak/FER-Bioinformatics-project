@@ -4,7 +4,8 @@ import scala.collection.mutable.{ArrayBuffer, HashMap => MutableHashMap}
 
 /**
   * LCSk++ implementation and main method.
-  * Dario Bosnjak
+  *
+  * @author Dario Bosnjak
   */
 object LCSkPlusPlus {
 
@@ -63,7 +64,6 @@ object LCSkPlusPlus {
     // key = substring
     // value = an array of starting indices
     val xSubstringStartIndices: MutableHashMap[Long, ArrayBuffer[Int]] = getAllKLengthSubstringStartIndices(X, k)
-    println("X gotov", xSubstringStartIndices.keySet.size)
 
     val kMatchPairs: ArrayBuffer[MatchPair] = ArrayBuffer[MatchPair]()
     for (j <- 0 until m if j + k <= m) {
@@ -145,14 +145,9 @@ object LCSkPlusPlus {
     val maxColDp = new FenwickTree(m)
 
     val matchPairs: Array[MatchPair] = getKMatchPairs(X, Y, k)
-    println("match parovi pronadjeni")
     val events: Array[Event] = getEvents(matchPairs).sorted
-    println("eventi pronadjeni")
-    println("nEvents: ", events.length)
     for (event <- events) {
       if (event.eventType == Event.START) {
-        //println("J: ", event.j)
-        //println("prev_dp: ", maxColDp.max(event.j))
         dp.put((event.i, event.j), if (event.j == 0) k else k + maxColDp.max(event.j))
       }
       else if (event.eventType == Event.END) {

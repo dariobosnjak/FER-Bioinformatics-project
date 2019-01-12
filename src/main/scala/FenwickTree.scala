@@ -3,7 +3,7 @@
   *
   * @param capacity number of elements in a tree
   *
-  * Dario Bosnjak
+  * @author Dario Bosnjak
   */
 class FenwickTree(capacity: Int) {
   private val _tree: Array[(Int, Event)] = Array.fill(capacity + 1) {

@@ -7,6 +7,8 @@ import scala.io.Source
   * @param header sequence ID/name
   * @param sequence sequence of characters
   * @param comments comments
+  *
+  * @author Dario Bosnjak
   */
 case class Sequence(header: String, sequence: String, comments: ArrayBuffer[String])
 
