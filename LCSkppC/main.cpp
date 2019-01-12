@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	LCKPP lckpp;
-	std::cout << "Final solution max Dp(P)=: " << lckpp.run(k,s1, s2) << std::endl;
+	std::cout << "Final solution max Dp(P)= " << lckpp.run(k,s1, s2) << std::endl;
 
 	return 0;
 }

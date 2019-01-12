@@ -25,7 +25,7 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 	std::cout << "Creating matches..." << std::endl;
 	std::unordered_map<std::string, std::vector<int>> kStrPositions;
 	for (int i = 0; i <= s1.size() - k; ++i) { //mozda je  <=
-		std::string kStr = s1.substr(i, k); // od pozicije i uzimamo iducih k slova
+		std::string kStr = s1.substr(i, k); // od pozicije i uzimamo iducih k sloðva
 		kStrPositions[kStr].push_back(i); // stavljamo u mapu pod kljuèem kStr na kraj 
 	}
 
@@ -40,7 +40,7 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 	}
 	std::cout << "Matches created." << std::endl;
 
-	std::cout << "Sorting matches.." << std::endl;
+	std::cout << "Sorting matches..." << std::endl;
 
 	// SORTIRANJE
 	// {1,2} {0, 10} {5, 3}  ===> {0, 10}, {1, 2}, {5, 3}
@@ -108,7 +108,6 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 			int ig = ip - 1;
 			int jg = jp - 1;
 
-			std::vector<std::pair<int, int>> v;
 
 			auto it = std::lower_bound(kMatchesStart.begin(), kMatchesStart.end(), std::make_pair(ig, jg));
 			if (it != kMatchesStart.end() && (*it).first == ig && (*it).second == jg) {  // postoji G koji nastavlja P!

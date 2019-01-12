@@ -12,7 +12,7 @@ class LCKPP {
 public:
 	int run(int k, std::string s1, std::string s2);
 
-	// stackoverflow
+	// Structure taken from Stack Overflow
 	struct pair_hash {
 		template <class T1, class T2>
 		std::size_t operator () (const std::pair<T1, T2> &p) const {
@@ -25,34 +25,54 @@ public:
 		}
 	};
 
+	
+	//*******************************
+	//Implementation of Fenwick tree
+	//*******************************
+	
+	// F and G elements
+	std::vector<int> F;
+	std::vector<int> G;
+
+	//Function returns the last high bit of x (other bits are zeros)
+	int lobit(int x) {
+	return x & -x;
+	}
+
+	//Initialise tree
 	void initFenwick(int n) {
 		n++;
-		for (int i = 0; i <= n; ++i) {
+		for (int i = 0; i <= n; i++) {
 			F.push_back(0);
 			G.push_back(0);
 		}
 	}
-
-	int lobit(int x) { return x & -x; }
-
+	
+	//Get exact element of tree
 	int queryExactElement(int x) {
 		return F[x + 1];
 	}
 
+	//Get maximum of given index
 	int queryMaxFenwick(int x) {
 		x++;
 		int ret = -1;
-		for (; x > 0; x -= lobit(x)) ret = std::max(ret, G[x]);
+		while (x > 0) {
+			ret = std::max(ret, G[x]);
+			x -= lobit(x);
+		}
 		return ret;
 	}
 
+	//Updating tree with new value
 	void updateFenwick(int x, int value, int n) {
 		x++; n++;
 		F[x] = value;
-		for (; x <= n; x += lobit(x)) G[x] = std::max(G[x], value);
+		while (x <= n) {
+			G[x] = std::max(G[x], value);
+			x += lobit(x);
+		}
 	}
-
-	std::vector<int> F;
-	std::vector<int> G;
+	
 
 };
