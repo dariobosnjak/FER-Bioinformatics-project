@@ -62,68 +62,71 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 	
 
 	//Searching events and applying dynamic programing algorithm
-	std::cout << "Event search started..." << std::endl;
 	int p1 = 0, p2 = 0;
+
+	std::cout << "Event search started..." << std::endl;
 	while (p1 < kMatchesStart.size() && p2 < kMatchesEnd.size()) {
 		bool isStartEvent;
 		std::pair<int, int> event;
 
-		if (p2 == kMatchesEnd.size()) {  // End of the second array
+		if (p2 == kMatchesEnd.size()) {  
+			//p2 reached the end of the second(end) array
 			isStartEvent = true;
 			event = kMatchesStart[p1];
 			p1++;
 		}
-		else if (p1 == kMatchesStart.size()) {  // End of the first array
+		else if (p1 == kMatchesStart.size()) { 
+			//p1 reached the end of the first(start) array
 			isStartEvent = false;
 			event = kMatchesEnd[p2];
 			p2++;
 		}
 		else if (kMatchesStart[p1] < kMatchesEnd[p2]) {
+			//p1 is before p2
 			isStartEvent = true;
 			event = kMatchesStart[p1];
 			p1++;
 		}
 		else {
+			//p2 is before p1
 			isStartEvent = false;
 			event = kMatchesEnd[p2];
 			p2++;
 		}
 
-		//if event is a start
+		//If event is start of Match
 		if (isStartEvent) {
-			// dp(P) = k + max x=[0,jP]MaxColDp(x)
+			//P=(ip,jp)
 			int ip = event.first;
 			int jp = event.second;
 			int maks = queryMaxFenwick(jp);
-			
+
+			// dp(P) = k + max x=[0,jP]MaxColDp(x)
 			dp[{ip, jp}] = maks + k;
 			solution = std::max(solution, dp[{ip, jp}]);
 		}
+		//If event is end of Match
 		else {
-			/*
-			if 9G s.t. P continues G then
-				dp(P)   maxfdp(P); dp(G) + 1g
-			end if
-			MaxColDp(jP + k)   max fMaxColDp(jP + k); dp(P)g
-			*/
-
+			//P=(ip,jp)
 			int ip = event.first - k;
 			int jp = event.second - k;
-
+			
+			//G=(ig,jg)
 			int ig = ip - 1;
 			int jg = jp - 1;
 
-
+			//it= iterator to the first event(start) not less than G
 			auto it = std::lower_bound(kMatchesStart.begin(), kMatchesStart.end(), std::make_pair(ig, jg));
-			if (it != kMatchesStart.end() && (*it).first == ig && (*it).second == jg) {  // postoji G koji nastavlja P!
+		
+			//If it points to a Match than P continues G
+			if (it != kMatchesStart.end() && (*it).first == ig && (*it).second == jg) { 
+				//dp(P)=max{dp(P),dp(G) + 1}
 				dp[{ip, jp}] = std::max(dp[{ip, jp}], dp[{ig, jg}] + 1);
 				solution = std::max(solution, dp[{ip, jp}]);
 			}
 
-
-			//updateSumFenwick(jp + k, std::max(maxColDp[jp + k], dp[{ip, jp}]), s2.size());
+			//MaxColDp(jP + k)= max{MaxColDp(jP + k),dp(P)}
 			updateFenwick(jp + k, std::max(queryExactElement(jp + k), dp[{ip, jp}]), s2.size());
-			//maxColDp[jp + k] = std::max(maxColDp[jp + k], dp[{ip, jp}]);
 		}
 	}
 	std::cout << "Processing done." << std::endl;
