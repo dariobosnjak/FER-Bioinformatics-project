@@ -1,4 +1,5 @@
-import { Pair, MatchPair } from "./interfaces/interfaces";
+import { MatchPair } from "./interfaces";
+import { Pair } from "./interfaces";
 
 export function matchPairs(
   seqA: string,
