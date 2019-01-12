@@ -1,3 +1,9 @@
+/*
+Implementation of LCSk++ algorithm
+Author: Dorian Ljubenko
+FER, Bioinformatics project
+*/
+
 #include <string>
 #include <vector>
 #include <algorithm>

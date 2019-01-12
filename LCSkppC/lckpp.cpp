@@ -1,5 +1,10 @@
-#include "lckpp.hpp"
+/*
+Implementation of LCSk++ algorithm
+Author: Dorian Ljubenko
+FER, Bioinformatics project
+*/
 
+#include "lckpp.hpp"
 #include <unordered_map>
 #include <vector>
 #include <iostream>
@@ -17,7 +22,7 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 	for (int i = 0; i <= s2.size(); ++i) {
 		maxColDp.push_back(0);
 	}
-	std::cout << "Kreiram matcheve" << std::endl;
+	std::cout << "Creating matches..." << std::endl;
 	std::unordered_map<std::string, std::vector<int>> kStrPositions;
 	for (int i = 0; i <= s1.size() - k; ++i) { //mozda je  <=
 		std::string kStr = s1.substr(i, k); // od pozicije i uzimamo iducih k slova
@@ -33,7 +38,9 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 			//std::cout << "Novi k match: (" << position << ", " << i << ")" << std::endl;
 		}
 	}
-	std::cout << "imam matcheve, idemo dalje" << std::endl;
+	std::cout << "Matches created." << std::endl;
+
+	std::cout << "Sorting matches.." << std::endl;
 
 	// SORTIRANJE
 	// {1,2} {0, 10} {5, 3}  ===> {0, 10}, {1, 2}, {5, 3}
@@ -41,7 +48,10 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 	//{3,13}, {4,5}, {8,6}
 	std::sort(kMatchesEnd.begin(), kMatchesEnd.end());
 
-	std::cout << "sortirano" << std::endl;
+	std::cout << "Sorting done." << std::endl;
+
+	
+	std::cout << "Event search started..." << std::endl;
 
 	int p1 = 0, p2 = 0;
 	while (p1 < kMatchesStart.size() && p2 < kMatchesEnd.size()) {
@@ -112,5 +122,6 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 			//maxColDp[jp + k] = std::max(maxColDp[jp + k], dp[{ip, jp}]);
 		}
 	}
+	std::cout << "Processing done." << std::endl;
 	return solution;
 }

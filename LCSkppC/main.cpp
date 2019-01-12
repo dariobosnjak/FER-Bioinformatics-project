@@ -1,25 +1,30 @@
+/*
+Implementation of LCSk++ algorithm
+Author: Dorian Ljubenko
+FER, Bioinformatics project
+*/
+
 #include <string>
 #include <iostream>
 #include <fstream>
-
 #include "lckpp.hpp"
 
-int main(void) {
-	// ucitavanje i ispis 
-	// pozivanje lck++
-
-	//std::string s1 = "CCCGACCAGCTTCCCGCCATGCTCTGGCGATTAAGGGGGTTAAATGCCACGCTAAGCGACCAGTATGGGG";
-	//std::string s2 = "AAGCTGGTCGCGTAGTGTGGCATTTAACCCCCTTAATCGCCAGGCCATGGAGAAGCTGGTCGCGTAGCGT";
-
-	//std::cout << s1 + s2 << std::endl;
+int main(int argc, char *argv[]) {
 	
-	//std::string s3 = s1 + s2;
-	//std::cout << s3.size() << std::endl;
-
+	if (argc!=3 ) {
+		std::cerr << "Error! Number of arguments has to be 3!" << std::endl;
+		return -1;
+	}
+	
 	bool firstString = true;
 	bool firstLine = true;
 	std::string s1 = "", s2 = "";
-	std::ifstream input("file1.txt");
+	std::ifstream input(argv[2]);
+	int k = atoi(argv[1]);
+	std::cout << "k=" << k << std::endl;
+
+
+	//Reading sekuences s1 and s2 from file
 	for (std::string line; getline(input, line); ) {
 		if (firstLine) {
 			firstLine = false;
@@ -37,10 +42,8 @@ int main(void) {
 		}
 	}
 
-	std::cout << s1 << " " << s2 << std::endl;
-
 	LCKPP lckpp;
-	std::cout << "RJESENJE: " << lckpp.run(10,s1, s2) << std::endl;
+	std::cout << "Final solution max Dp(P)=: " << lckpp.run(k,s1, s2) << std::endl;
 
 	return 0;
 }
