@@ -16,16 +16,18 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 	
-	bool firstString = true;
-	bool firstLine = true;
+	
 	int k = atoi(argv[1]);
 	int solution;
 	
 	std::cout << "k=" << k << std::endl;
-	
+
 	//Reading sekuences s1 and s2 from file
 	std::string s1 = "", s2 = "";
 	std::ifstream input(argv[2]);
+
+	bool firstString = true;
+	bool firstLine = true;
 
 	for (std::string line; getline(input, line); ) {
 		if (firstLine) {

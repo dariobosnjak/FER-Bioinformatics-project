@@ -26,9 +26,9 @@ public:
 	};
 
 	
-	//*******************************
+	//*************************************
 	//Implementation of Fenwick tree
-	//*******************************
+	//*************************************
 	
 	// F and G elements
 	std::vector<int> F;
@@ -39,7 +39,7 @@ public:
 	return x & -x;
 	}
 
-	//Initialise tree
+	//Function to initialise tree
 	void initFenwick(int n) {
 		n++;
 		for (int i = 0; i <= n; i++) {
@@ -48,12 +48,12 @@ public:
 		}
 	}
 	
-	//Get exact element of tree
+	//Function to get exact element of tree
 	int queryExactElement(int x) {
 		return F[x + 1];
 	}
 
-	//Get maximum of given index
+	//Function to get maximum of given index
 	int queryMaxFenwick(int x) {
 		x++;
 		int ret = -1;
@@ -64,7 +64,7 @@ public:
 		return ret;
 	}
 
-	//Updating tree with new value
+	//Function to update tree with new value
 	void updateFenwick(int x, int value, int n) {
 		x++; n++;
 		F[x] = value;
@@ -73,6 +73,6 @@ public:
 			x += lobit(x);
 		}
 	}
-	
+	//**************************************
 
 };

@@ -11,59 +11,69 @@ FER, Bioinformatics project
 #include <algorithm>
 #include <cassert>
 
+//Class LCKPP implements LCSk++ algorithm
+
 int LCKPP::run(int k, std::string s1, std::string s2) {
 	int solution = 0;
 
+	//Initialising Fenwick tree
 	initFenwick(s2.size());
 
-	std::unordered_map<std::pair<int, int>, int, pair_hash> dp;  //da li ovo mora da bude hash?
+	//Hash map of Dp values 
+	std::unordered_map<std::pair<int, int>, int, pair_hash> dp; 
 	
+	//Initialising MaxColDp and filling with zeros
 	std::vector<int> maxColDp;
 	for (int i = 0; i <= s2.size(); ++i) {
 		maxColDp.push_back(0);
 	}
+
+	/*
+	Creating matches 
+	Strings of k lenght are extracted from s1 , positions stored in kStrPositions
+	Than all positions are searched and maching strings are found in s2 thus creatind Match pairs
+	*/
 	std::cout << "Creating matches..." << std::endl;
 	std::unordered_map<std::string, std::vector<int>> kStrPositions;
-	for (int i = 0; i <= s1.size() - k; ++i) { //mozda je  <=
-		std::string kStr = s1.substr(i, k); // od pozicije i uzimamo iducih k sloðva
-		kStrPositions[kStr].push_back(i); // stavljamo u mapu pod kljuèem kStr na kraj 
+	std::vector<std::pair<int, int>> kMatchesStart, kMatchesEnd;
+
+	for (int i = 0; i <= s1.size() - k; ++i) { 
+		std::string kStr = s1.substr(i, k); 
+		kStrPositions[kStr].push_back(i); 
 	}
 
-	std::vector<std::pair<int, int>> kMatchesStart, kMatchesEnd;
-	for (int i = 0; i <= s2.size() - k; ++i) { //mozda je  <=
+	for (int i = 0; i <= s2.size() - k; ++i) { 
 		std::string kStr = s2.substr(i, k);
+		//Searching all positions for matching pairs
 		for (int position : kStrPositions[kStr]) {
-			kMatchesStart.push_back({ position, i });     //nalazimo par u s2 i stavljamo u par
+			kMatchesStart.push_back({ position, i });     
 			kMatchesEnd.push_back({ position + k, i + k });
-			//std::cout << "Novi k match: (" << position << ", " << i << ")" << std::endl;
 		}
 	}
 	std::cout << "Matches created." << std::endl;
 
+
+	//Sorting Matches, separately starts and ends
 	std::cout << "Sorting matches..." << std::endl;
-
-	// SORTIRANJE
-	// {1,2} {0, 10} {5, 3}  ===> {0, 10}, {1, 2}, {5, 3}
 	std::sort(kMatchesStart.begin(), kMatchesStart.end());
-	//{3,13}, {4,5}, {8,6}
 	std::sort(kMatchesEnd.begin(), kMatchesEnd.end());
-
 	std::cout << "Sorting done." << std::endl;
 
 	
-	std::cout << "Event search started..." << std::endl;
 
+	//Searching events and applying dynamic programing algorithm
+	std::cout << "Event search started..." << std::endl;
 	int p1 = 0, p2 = 0;
 	while (p1 < kMatchesStart.size() && p2 < kMatchesEnd.size()) {
 		bool isStartEvent;
 		std::pair<int, int> event;
 
-		if (p2 == kMatchesEnd.size()) {  // obisli smo sve iz prvog niza
+		if (p2 == kMatchesEnd.size()) {  // End of the second array
 			isStartEvent = true;
 			event = kMatchesStart[p1];
 			p1++;
 		}
-		else if (p1 == kMatchesStart.size()) {  // obisli smo sve iz drugog niza
+		else if (p1 == kMatchesStart.size()) {  // End of the first array
 			isStartEvent = false;
 			event = kMatchesEnd[p2];
 			p2++;
@@ -79,18 +89,13 @@ int LCKPP::run(int k, std::string s1, std::string s2) {
 			p2++;
 		}
 
+		//if event is a start
 		if (isStartEvent) {
-			// dp(P)   k + maxx20:::jP MaxColDp(x)
+			// dp(P) = k + max x=[0,jP]MaxColDp(x)
 			int ip = event.first;
 			int jp = event.second;
 			int maks = queryMaxFenwick(jp);
-			/*
-			int m1 = -1;
-			for (int i = 0; i <= jp; ++i) {               // jel lik zabrijo u PDFu? meni radi s <=!
-				m1 = std::max(m1, maxColDp[i]);
-			}
 			
-			assert(m1 == maks);*/
 			dp[{ip, jp}] = maks + k;
 			solution = std::max(solution, dp[{ip, jp}]);
 		}
