@@ -151,6 +151,8 @@ object LCSkPlusPlus {
     println("nEvents: ", events.length)
     for (event <- events) {
       if (event.eventType == Event.START) {
+        //println("J: ", event.j)
+        //println("prev_dp: ", maxColDp.max(event.j))
         dp.put((event.i, event.j), if (event.j == 0) k else k + maxColDp.max(event.j))
       }
       else if (event.eventType == Event.END) {
