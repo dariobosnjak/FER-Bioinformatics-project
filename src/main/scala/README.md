@@ -21,6 +21,7 @@
 2. Install Scala 2.12.8:
     1. Download the installer: `sudo wget https://downloads.lightbend.com/scala/2.12.8/scala-2.12.8.deb`
     2. Install the `scala-2.12.8.deb` file: `sudo dpkg -i scala-2.12.8.deb`
+		3. Validate Scala version: `scala -version`
 
 ### Compilation and execution
 1. Create a bin directory:
