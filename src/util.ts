@@ -14,10 +14,12 @@ export function getCharacters(...seqs: Array<string>): Map<string, number> {
 }
 
 export function eventComparator(a: Event, b: Event) {
+  if (!a || !b) {
+    console.log({ a, b });
+  }
   if (a === b) {
     return 0;
   }
-
   const [i1, j1, i2, j2] = [a.pair.i, a.pair.j, b.pair.i, b.pair.j];
 
   if (i1 < i2) {

@@ -36,7 +36,11 @@ export default class FenwickTree {
       return this.query(rightIdx);
     }
 
-    return this.query(rightIdx) - this.query(leftIdx);
+    return this.query(rightIdx) - this.query(leftIdx - 1);
+  }
+
+  public get(idx: number): number {
+    return this.tree[idx];
   }
 
   private assertOutOfRange(position: number) {

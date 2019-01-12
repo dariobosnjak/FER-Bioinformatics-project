@@ -17,6 +17,7 @@
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedParameters": false,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "inlineSourceMap": true
   }
 }

@@ -6,7 +6,7 @@ import FenwickTree from "./fenwickTree";
 
 export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
   const dp = new Map<Pair, number>();
-  const maxColDp = new FenwickTree();
+  const maxColDp = new FenwickTree(seqB.length);
 
   const mPairs = matchPairs(seqA, seqB, k);
   const events: Array<Event> = _.flatMap(mPairs, matchPair => [
@@ -24,11 +24,55 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
 
   events.forEach(event => {
     if (event.type === EventType.Start) {
-      // TODO: dp(P) = k + max MaxColDp(x)
+      const max = maxColDp.query(event.pair.j);
+      dp.set(event.pair, k + max);
     } else {
+      const g = findG(event, events);
+      if (g) {
+        dp.set(event.pair, Math.max(dp.get(event.pair), dp.get(g.pair) + 1));
+      }
+      maxColDp.increase(
+        event.pair.j + k,
+        Math.max(maxColDp.get(event.pair.j + k), dp.get(event.pair))
+      );
     }
   });
 
-  console.log(events);
+  if (dp.size > 0) {
+    console.log(dp);
+  }
   return 42;
+}
+
+/**
+ * Finds an event that precedes another event using binary search
+ *
+ * @param p P event that continues G
+ * @param events list of all events
+ */
+function findG(p: Event, events: Array<Event>): Event {
+  const g: Event = {
+    pair: { i: p.pair.i - 1, j: p.pair.j - 1 },
+    type: EventType.Start
+  };
+
+  let left = 0;
+  let right = events.length - 1;
+
+  while (left <= right) {
+    const pivot = Math.floor((right + left) / 2);
+    const compare = eventComparator(events[pivot], g);
+    switch (compare) {
+      case -1:
+        left = pivot + 1;
+        break;
+      case 1:
+        right = pivot - 1;
+        break;
+      case 0:
+        return null;
+    }
+  }
+
+  return g;
 }

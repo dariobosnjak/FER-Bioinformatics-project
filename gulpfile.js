@@ -27,15 +27,7 @@ var tsTestProject = tsc.createProject("tsconfig.json");
 
 gulp.task("build-test", function() {
   return gulp
-    .src(
-      [
-        "src/**/**.ts",
-        "test/**/**.test.ts",
-        "typings/main.d.ts",
-        "src/interfaces/interfaces.d.ts"
-      ],
-      { base: "." }
-    )
+    .src(["src/**/**.ts", "test/**/**.test.ts"], { base: "." })
     .pipe(tsTestProject())
     .on("error", function(err) {
       process.exit(1);
@@ -81,13 +73,12 @@ gulp.task("build", function() {
     .pipe(gulp.dest(outputFolder));
 });
 
-gulp.task("watch", ["default"], function() {
-  browserSync.init({
-    server: "."
-  });
+gulp.task("watch-build", function() {
+  gulp.watch(["src/**/**.ts", "test/**/**.ts"], ["build"]);
+});
 
+gulp.task("watch", function() {
   gulp.watch(["src/**/**.ts", "test/**/**.ts"], ["default"]);
-  gulp.watch("dist/*.js").on("change", browserSync.reload);
 });
 
 gulp.task("default", function(cb) {

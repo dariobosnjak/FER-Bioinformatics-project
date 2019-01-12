@@ -14,7 +14,7 @@ export function matchPairs(
     if (!map.has(sub)) {
       map.set(sub, []);
     }
-    map.get(sub).push({ i, j: null });
+    map.get(sub).push({ i, j: 0 });
   }
 
   for (let j = 0; j < seqB.length - (k - 1); ++j) {
