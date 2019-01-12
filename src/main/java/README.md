@@ -21,7 +21,7 @@ Implementation of research paper [*LCSk*++: Practical similarity metric for long
         * `export JAVA_HOME="<paste the path>"`
         * `export PATH=$JAVA_HOME/bin:$PATH`
     * Save the file
-7. Reboot or type `source /etc/profile` to apply changes in the current terminal
+7. Reboot to apply changes
 8. Validate the `JAVA_HOME` variable: `which java` and `which javac`
 
 ### 2. Compile & Run
