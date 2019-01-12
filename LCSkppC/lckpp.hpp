@@ -12,7 +12,8 @@ class LCKPP {
 public:
 	int run(int k, std::string s1, std::string s2);
 
-	// Structure taken from Stack Overflow
+	// std::pair<T1, T2> where T1 and T2 are hashable types
+	// taken from Stack Overflow
 	struct pair_hash {
 		template <class T1, class T2>
 		std::size_t operator () (const std::pair<T1, T2> &p) const {
@@ -31,12 +32,14 @@ public:
 	//*************************************
 	
 	// F and G elements
+	// F - elements
+	// G - max values
 	std::vector<int> F;
 	std::vector<int> G;
 
 	//Function returns the last high bit of x (other bits are zeros)
 	int lobit(int x) {
-	return x & -x;
+		return x & -x;
 	}
 
 	//Function to initialise tree

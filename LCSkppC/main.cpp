@@ -4,6 +4,7 @@ Author: Dorian Ljubenko
 FER, Bioinformatics project
 */
 
+#include <chrono>
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -46,10 +47,20 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	//Initialising class lckpp and calling run function
+	//Initialising class lckpp
 	LCKPP lckpp;
+	
+	//Executing LCSkpp algorithm and timing result
+	auto begin = std::chrono::high_resolution_clock::now();
+	
 	solution = lckpp.run(k, s1, s2);
+	
+	auto end = std::chrono::high_resolution_clock::now();
+	auto dur = end - begin;
+	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+
 	std::cout << "max Dp(P)= " << solution << std::endl;
+	std::cout << "Time elapsed= " << ms << " ms" << std::endl;
 
 	return 0;
 }
