@@ -6,3 +6,4 @@ build.sbt
 !/data/results/*
 !/data/bacteria/*
 data/*
+Projekt-Java.iml
