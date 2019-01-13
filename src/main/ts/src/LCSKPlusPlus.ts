@@ -34,12 +34,10 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
       if (g) {
         dp.set(event.pair, (dp.get(g.pair) || 0) + 1);
       }
-      if (dp.get(p.pair) > maxColDp.get(event.pair.j - 1)) {
-        maxColDp.update(
-          event.pair.j + k,
-          Math.max(maxColDp.get(event.pair.j + k) || 0, dp.get(event.pair) || 0)
-        );
-      }
+      maxColDp.update(
+        event.pair.j + k,
+        Math.max(maxColDp.get(event.pair.j + k) || 0, dp.get(event.pair) || 0)
+      );
     }
   });
 
