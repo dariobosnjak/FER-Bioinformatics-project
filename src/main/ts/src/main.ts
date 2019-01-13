@@ -7,12 +7,15 @@ const filePath = path.resolve(args[2]);
 const filename = path.parse(filePath).name;
 const resultsDir = path.resolve("results");
 
-console.log(filePath);
+const k = Number(args.length > 3 ? args[3] : 10);
 
-const k = 10;
+console.log({
+  filePath,
+  k
+});
 
 const [seqA, seqB] = readFastaFile(
-  args.length > 0 ? filePath : "../../../data/synthetic/1e6/input1-1e6.txt"
+  args.length > 2 ? filePath : "../../../data/synthetic/1e6/input1-1e6.txt"
 );
 const { result, duration } = timed(() => lcskPlusPlus(seqA, seqB, k));
 const memoryUsage = humanizeMemory(process.memoryUsage().heapUsed);

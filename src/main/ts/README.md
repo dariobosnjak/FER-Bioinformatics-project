@@ -45,7 +45,9 @@ Other distributions: https://yarnpkg.com/lang/en/docs/install/
 1. Clone or download this repository
 2. Run `yarn install` in root directory of TypeScript project
 3. Run `yarn build` to compile
+4. Run `node src/main.js [path to fasta file] [k]`
 
 ### 3. Test
 
-1. Run `yarn test` to run all tests
+1. Run `runTests.sh` to run all tests
+2. Results are output to `/results`
