@@ -24,23 +24,26 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
 
   events.forEach(event => {
     if (event.type === EventType.Start) {
-      const val = k + maxColDp.query(event.pair.j);
-      dp.set(event.pair, val);
+      dp.set(event.pair, k + maxColDp.query(event.pair.j));
     } else {
       const p: Event = {
         pair: { i: event.pair.i - k, j: event.pair.j - k },
         type: event.type
       };
-      const g = findG(event, events);
+      const g = findG(p, events);
+      // console.log(g);
       if (g) {
         if (dp.get(g.pair) + 1 > dp.get(event.pair)) {
           dp.set(event.pair, dp.get(g.pair) + 1);
+          console.log(
+            `that happened: d(${event.pair}) = ${dp.get(event.pair)}`
+          );
         }
       }
       if (dp.get(p.pair) > maxColDp.get(event.pair.j - 1)) {
         maxColDp.update(
           event.pair.j + k,
-          Math.max(maxColDp.get(event.pair.j - 1) || 0, dp.get(event.pair) || 0)
+          Math.max(maxColDp.get(event.pair.j - 1), dp.get(event.pair))
         );
       }
     }
@@ -72,8 +75,8 @@ function findG(p: Event, events: Array<Event>): Event {
         right = pivot - 1;
         break;
       case 0:
-        return null;
+        return g;
     }
   }
-  return g;
+  return null;
 }
