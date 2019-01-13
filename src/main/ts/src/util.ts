@@ -41,7 +41,7 @@ export function timed(f: () => any) {
   const to = new Date();
   const diff = to.getTime() - from.getTime();
   console.log(`${diff} ms`);
-  return out;
+  return { result: out, duration: diff };
 }
 
 export function readFastaFile(path: string): [string, string] {
@@ -56,6 +56,10 @@ export function readFastaFile(path: string): [string, string] {
         .join("")
     );
   return [seqs[0], seqs[1]];
+}
+
+export function writeResults(out: any, path: string) {
+  fs.writeFileSync(path, JSON.stringify(out, null, 4));
 }
 
 export function humanizeMemory(bytes: number): string {

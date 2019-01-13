@@ -109,3 +109,5 @@ typings/
 /test/**/*.js
 
 /.vscode
+
+/results

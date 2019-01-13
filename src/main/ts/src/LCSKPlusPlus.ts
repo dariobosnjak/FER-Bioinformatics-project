@@ -1,7 +1,7 @@
 import { matchPairs } from "./matchPairs";
 import { EventType, Event, Pair } from "./interfaces";
 import * as _ from "lodash";
-import { eventComparator, humanizeMemory } from "./util";
+import { eventComparator } from "./util";
 import FenwickTree from "./fenwickTree";
 import * as wu from "wu";
 
@@ -24,7 +24,7 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
 
   events.forEach(event => {
     if (event.type === EventType.Start) {
-      dp.set(event.pair, k + maxColDp.query(event.pair.j) || 0);
+      dp.set(event.pair, k + (maxColDp.query(event.pair.j) || 0));
     } else {
       const p: Event = {
         pair: { i: event.pair.i - k, j: event.pair.j - k },
