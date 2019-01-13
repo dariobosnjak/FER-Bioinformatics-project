@@ -27,7 +27,7 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
       dp.set(event.pair, k + maxColDp.query(event.pair.j) || 0);
     } else {
       const p: Event = {
-        pair: { i: event.pair.i, j: event.pair.j },
+        pair: { i: event.pair.i - k, j: event.pair.j - k },
         type: event.type
       };
       const g = findG(p, events);
