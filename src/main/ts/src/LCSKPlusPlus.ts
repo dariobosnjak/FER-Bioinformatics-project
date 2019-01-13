@@ -42,7 +42,7 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
   });
 
   if (dp.size > 0) {
-    return Array.from(dp.values()).reduce((max, val) => Math.max(max, val));
+    return Math.max(...Array.from(dp.values()));
   }
   return 0;
 }
