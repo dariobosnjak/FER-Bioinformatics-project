@@ -10,6 +10,7 @@ FER, Bioinformatics project
 #include <fstream>
 #include "lckpp.hpp"
 
+
 int main(int argc, char *argv[]) {
 	
 	if (argc!=3 ) {
@@ -17,16 +18,15 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 	
-	
 	int k = atoi(argv[1]);
 	int solution;
 	
 	std::cout << "k=" << k << std::endl;
 
-	//Reading sekuences s1 and s2 from file
+	//Reading sekuences s1 and s2 from 
 	std::string s1 = "", s2 = "";
 	std::ifstream input(argv[2]);
-
+	
 	bool firstString = true;
 	bool firstLine = true;
 
@@ -51,10 +51,13 @@ int main(int argc, char *argv[]) {
 	LCKPP lckpp;
 	
 	//Executing LCSkpp algorithm and timing result
+	//Starting timing
 	auto begin = std::chrono::high_resolution_clock::now();
 	
+	//Running the program
 	solution = lckpp.run(k, s1, s2);
 	
+	//Ending timing and calculating elapsed time
 	auto end = std::chrono::high_resolution_clock::now();
 	auto dur = end - begin;
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
