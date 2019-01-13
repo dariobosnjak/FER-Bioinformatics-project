@@ -17,6 +17,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedParameters": false,
     "noUnusedLocals": true,
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "downlevelIteration": true
   }
 }

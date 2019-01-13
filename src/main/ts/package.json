@@ -36,9 +36,11 @@
     "@types/lodash": "^4.14.119",
     "@types/moment": "^2.13.0",
     "@types/node": "^10.12.18",
+    "@types/wu": "^2.1.37",
     "lodash": "^4.17.11",
     "moment": "^2.23.0",
     "moment-interval": "^0.2.1",
-    "tsify": "^4.0.1"
+    "tsify": "^4.0.1",
+    "wu": "^2.1.0"
   }
 }

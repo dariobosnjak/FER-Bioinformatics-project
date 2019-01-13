@@ -1,13 +1,14 @@
 import { expect } from "chai";
-import { lcskPlusPlus } from "../src/LCSKPlusPlus";
 
 describe("LCSK", () => {
-  let x = "ABCGGAB";
-  let y = "ABCBA";
-  let k = 2;
+  const bacteria = [...Array(7).keys()].map(i => `bacteria${i + 1}.txt`);
+  const synthetic = ["1e2", "1e4", "1e6"].map(x =>
+    [...Array(4).keys()].map(i => `input${i + 1}-${x}.txt`)
+  );
+  const files = { bacteria, demo: ["sequence.fasta"], synthetic };
+  console.log(files);
 
   it("test1", () => {
-    let out = lcskPlusPlus(x, y, k);
-    expect(out).eql(42);
+    expect(true);
   });
 });

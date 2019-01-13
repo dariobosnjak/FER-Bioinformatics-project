@@ -3,6 +3,7 @@ import { EventType, Event, Pair } from "./interfaces";
 import * as _ from "lodash";
 import { eventComparator } from "./util";
 import FenwickTree from "./fenwickTree";
+import * as wu from "wu";
 
 export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
   const dp = new Map<Pair, number>();
@@ -34,7 +35,7 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
         );
         dp.set(event.pair, val);
       }
-      maxColDp.increase(
+      maxColDp.update(
         event.pair.j + k,
         Math.max(maxColDp.get(event.pair.j + k) || 0, dp.get(event.pair) || 0)
       );
@@ -42,7 +43,7 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
   });
 
   if (dp.size > 0) {
-    return Math.max(...Array.from(dp.values()));
+    return wu(dp.values()).reduce((max, val) => Math.max(max, val));
   }
   return 0;
 }
