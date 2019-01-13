@@ -15,29 +15,19 @@ export function getCharacters(...seqs: Array<string>): Map<string, number> {
 }
 
 export function eventComparator(a: Event, b: Event) {
-  if (a === b) {
-    return 0;
-  }
-
   const [i1, j1, i2, j2] = [a.pair.i, a.pair.j, b.pair.i, b.pair.j];
 
-  if (i1 === i2 && j1 === j2) {
+  if (i1 === i2 && j1 === j2 && a.type === b.type) {
     return 0;
-  }
-
-  if (i1 < i2) {
-    return -1;
-  }
-
-  if (i1 === i2 && j1 < j2) {
-    return -1;
   }
 
   if (
-    i1 === i2 &&
-    j1 === j2 &&
-    a.type === EventType.End &&
-    b.type === EventType.Start
+    i1 < i2 ||
+    (i1 === i2 && j1 < j2) ||
+    (i1 === i2 &&
+      j1 === j2 &&
+      a.type === EventType.End &&
+      b.type === EventType.Start)
   ) {
     return -1;
   }
