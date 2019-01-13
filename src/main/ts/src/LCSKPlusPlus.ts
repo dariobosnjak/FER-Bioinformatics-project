@@ -1,12 +1,12 @@
 import { matchPairs } from "./matchPairs";
-import { EventType, Event, Pair } from "./interfaces";
+import { EventType, Event } from "./interfaces";
 import * as _ from "lodash";
 import { eventComparator } from "./util";
-import FenwickTree from "./fenwickTree";
 import * as wu from "wu";
+import FenwickTree from "./fenwickTree";
 
 export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
-  const dp = new Map<Pair, number>();
+  const dp = new Map<string, number>();
   const maxColDp = new FenwickTree(seqB.length);
 
   const mPairs = matchPairs(seqA, seqB, k);
@@ -24,7 +24,7 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
 
   events.forEach(event => {
     if (event.type === EventType.Start) {
-      dp.set(event.pair, k + (maxColDp.query(event.pair.j) || 0));
+      dp.set(s(event.pair), k + (maxColDp.query(event.pair.j) || 0));
     } else {
       const p: Event = {
         pair: { i: event.pair.i - k, j: event.pair.j - k },
@@ -32,11 +32,14 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
       };
       const g = findG(p, events);
       if (g) {
-        dp.set(event.pair, (dp.get(g.pair) || 0) + 1);
+        dp.set(s(p.pair), (dp.get(s(g.pair)) || 0) + 1);
       }
       maxColDp.update(
-        event.pair.j + k,
-        Math.max(maxColDp.get(event.pair.j + k) || 0, dp.get(event.pair) || 0)
+        p.pair.j + k,
+        Math.max(
+          maxColDp.get(event.pair.j + k) || 0,
+          dp.get(s(event.pair)) || 0
+        )
       );
     }
   });
@@ -71,4 +74,8 @@ function findG(p: Event, events: Array<Event>): Event {
     }
   }
   return null;
+}
+
+function s(obj: any) {
+  return JSON.stringify(obj);
 }
