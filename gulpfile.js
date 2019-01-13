@@ -23,12 +23,12 @@ gulp.task("lint", function() {
     .pipe(tslint.report());
 });
 
-var tsTestProject = tsc.createProject("tsconfig.json");
+var tsProject = tsc.createProject("tsconfig.json");
 
-gulp.task("build-test", function() {
+gulp.task("build-js", function() {
   return gulp
     .src(["src/**/**.ts", "test/**/**.test.ts"], { base: "." })
-    .pipe(tsTestProject())
+    .pipe(tsProject())
     .on("error", function(err) {
       process.exit(1);
     })
@@ -82,5 +82,5 @@ gulp.task("watch", function() {
 });
 
 gulp.task("default", function(cb) {
-  runSequence("lint", "build-test", "test", "build", cb);
+  runSequence("lint", "build-js", "test", "build", cb);
 });

@@ -9,8 +9,9 @@
     "test": "test"
   },
   "scripts": {
+    "preinstall": "export NODE_OPTIONS=--max_old_space_size=4096",
     "test": "gulp lint && gulp build && gulp test",
-    "start": "gulp build && node dist/main.min.js"
+    "start": "gulp build-js && node src/main.js"
   },
   "devDependencies": {
     "@types/chai": "^3.4.34",
@@ -33,7 +34,11 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.119",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^10.12.18",
     "lodash": "^4.17.11",
+    "moment": "^2.23.0",
+    "moment-interval": "^0.2.1",
     "tsify": "^4.0.1"
   }
 }

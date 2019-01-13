@@ -21,13 +21,16 @@ export function matchPairs(
     const sub = seqB.substr(j, k);
     if (map.has(sub)) {
       map.get(sub).forEach(pair => {
-        matchPairs.push({
-          start: { i: pair.i, j },
-          end: { i: pair.i + k, j: j + k }
-        });
+        if (seqA.substring(pair.i, pair.i + k) === sub) {
+          const start: Pair = { i: pair.i, j };
+          const end: Pair = { i: start.i + k, j: start.j + k };
+          matchPairs.push({
+            start,
+            end
+          });
+        }
       });
     }
   }
-
   return matchPairs;
 }

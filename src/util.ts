@@ -1,4 +1,5 @@
 import { Event, EventType } from "./interfaces";
+import fs = require("fs");
 
 export function getCharacters(...seqs: Array<string>): Map<string, number> {
   let characters: Map<string, number> = new Map();
@@ -40,4 +41,27 @@ export function eventComparator(a: Event, b: Event) {
   }
 
   return 1;
+}
+
+export function timed(f: () => any) {
+  const from = new Date();
+  const out = f();
+  const to = new Date();
+  const diff = to.getTime() - from.getTime();
+  console.log(`${diff} ms`);
+  return out;
+}
+
+export function readFastaFile(path: string): [string, string] {
+  let file: string = fs.readFileSync(path).toString();
+  let seqs = file
+    .split(">")
+    .splice(1)
+    .map(s =>
+      s
+        .split("\n")
+        .splice(1)
+        .join("")
+    );
+  return [seqs[0], seqs[1]];
 }

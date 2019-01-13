@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["es6", "dom", "esnext.array"],
-    "types": ["mocha"],
+    "types": ["mocha", "node"],
     "sourceMap": true,
     "module": "commonjs",
     "moduleResolution": "node",

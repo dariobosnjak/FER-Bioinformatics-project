@@ -19,37 +19,37 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
       type: EventType.End
     }
   ]);
-
   events.sort(eventComparator);
 
   events.forEach(event => {
     if (event.type === EventType.Start) {
-      const max = maxColDp.query(event.pair.j);
-      dp.set(event.pair, k + max);
+      const val = k + maxColDp.query(event.pair.j);
+      dp.set(event.pair, val);
     } else {
       const g = findG(event, events);
       if (g) {
-        dp.set(event.pair, Math.max(dp.get(event.pair), dp.get(g.pair) + 1));
+        console.log([dp.keys(), event.pair, g.pair]);
+        const val = Math.max(
+          dp.get(event.pair) || 0,
+          (dp.get(g.pair) || 0) + 1
+        );
+        dp.set(event.pair, val);
+      } else {
+        console.log("No g");
       }
       maxColDp.increase(
         event.pair.j + k,
-        Math.max(maxColDp.get(event.pair.j + k), dp.get(event.pair))
+        Math.max(maxColDp.get(event.pair.j + k) || 0, dp.get(event.pair) || 0)
       );
     }
   });
 
   if (dp.size > 0) {
-    console.log(dp);
+    return Array.from(dp.values()).reduce((max, val) => Math.max(max, val));
   }
-  return 42;
+  return 0;
 }
 
-/**
- * Finds an event that precedes another event using binary search
- *
- * @param p P event that continues G
- * @param events list of all events
- */
 function findG(p: Event, events: Array<Event>): Event {
   const g: Event = {
     pair: { i: p.pair.i - 1, j: p.pair.j - 1 },
@@ -73,6 +73,5 @@ function findG(p: Event, events: Array<Event>): Event {
         return null;
     }
   }
-
   return g;
 }

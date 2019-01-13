@@ -8,7 +8,6 @@ export default class FenwickTree {
   }
 
   public increase(position: number, value: number): FenwickTree {
-    this.assertOutOfRange(position);
     for (let i = position; i <= this.size; i += i & -i) {
       this.tree[i] += value;
     }
@@ -17,8 +16,6 @@ export default class FenwickTree {
   }
 
   public query(position: number): number {
-    this.assertOutOfRange(position);
-
     let sum = 0;
     for (let i = position; i > 0; i -= i & -i) {
       sum += this.tree[i];
@@ -28,10 +25,6 @@ export default class FenwickTree {
   }
 
   public queryRange(leftIdx: number, rightIdx: number): number {
-    if (leftIdx > rightIdx) {
-      throw new Error("Left index can not be greater than right.");
-    }
-
     if (leftIdx === 1) {
       return this.query(rightIdx);
     }
@@ -41,11 +34,5 @@ export default class FenwickTree {
 
   public get(idx: number): number {
     return this.tree[idx];
-  }
-
-  private assertOutOfRange(position: number) {
-    if (position < 1 || position > this.size) {
-      throw new Error("Position out of range.");
-    }
   }
 }
