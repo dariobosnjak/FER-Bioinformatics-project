@@ -1,7 +1,7 @@
 import { matchPairs } from "./matchPairs";
 import { EventType, Event, Pair } from "./interfaces";
 import * as _ from "lodash";
-import { eventComparator } from "./util";
+import { eventComparator, humanizeMemory } from "./util";
 import FenwickTree from "./fenwickTree";
 import * as wu from "wu";
 

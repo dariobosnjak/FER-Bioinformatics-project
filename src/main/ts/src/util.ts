@@ -57,3 +57,25 @@ export function readFastaFile(path: string): [string, string] {
     );
   return [seqs[0], seqs[1]];
 }
+
+export function humanizeMemory(bytes: number): string {
+  let res = bytes;
+  if (res < 1024) {
+    return `${round(res, 2)} B`;
+  }
+  res /= 1024;
+  if (res < 1024) {
+    return `${round(res, 2)} kB`;
+  }
+  res /= 1024;
+  if (res < 1024) {
+    return `${round(res, 2)} MB`;
+  }
+  res /= 1024;
+  return `${round(res, 2)} GB`;
+}
+
+export function round(n: number, digits: number): number {
+  const x = 10 ** digits;
+  return Math.round(n * x) / x;
+}

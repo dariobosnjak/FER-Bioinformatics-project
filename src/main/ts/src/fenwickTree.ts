@@ -8,9 +8,9 @@ export default class FenwickTree {
   }
 
   public update(position: number, value: number): FenwickTree {
-    for (let i = position + 1; i <= this.size - 1; i += i & -i) {
+    for (let i = position; i < this.size; i |= i + 1) {
       if (value > this.tree[i]) {
-        this.tree[i] = value;
+        this.tree[i] += value;
       }
     }
 
@@ -18,12 +18,12 @@ export default class FenwickTree {
   }
 
   public query(position: number): number {
-    let max = 0;
-    for (let i = position; i > 0; i -= i & -i) {
-      max = Math.max(this.tree[i], max);
+    let res = 0;
+    for (let i = position; i >= 0; i |= (i & (i + 1)) - 1) {
+      res += this.tree[i];
     }
 
-    return max;
+    return res;
   }
 
   public get(idx: number): number {

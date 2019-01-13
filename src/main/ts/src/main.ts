@@ -1,10 +1,10 @@
 import { lcskPlusPlus } from "./LCSKPlusPlus";
-import { timed, readFastaFile } from "./util";
+import { timed, readFastaFile, humanizeMemory } from "./util";
 
-// const seqA = <"GTCGAACGGGAATCAGTTAGGCGACCACGTTCCAGCCGTGGAATCAGTCGTCGACAAGTTCATATGGATTTTCCTCCTTTACTTGAGTAAGGCCAATGAT";
-// const seqB = "CAGAACCGCCGGACAGGCGTCTTCCTGAATAATCCGTCATTGCGTCGAATAGCATGCGGGTAGTACAAAAACGCAGAGATCGACCTTCGGTAGCATGTAG";
-
-// const out = lcskPlusPlus(seqA, seqB, 2);
-const [seqA, seqB] = readFastaFile("../../../data/bacteria/bacteria1.txt");
-const out = timed(() => lcskPlusPlus(seqA, seqB, 15));
+const [seqA, seqB] = readFastaFile(
+  "../../../data/synthetic/1e6/input1-1e6.txt"
+);
+const out = timed(() => lcskPlusPlus(seqA, seqB, 10));
+const memoryUsage = process.memoryUsage();
+console.log(humanizeMemory(memoryUsage.heapUsed));
 console.log(out);
