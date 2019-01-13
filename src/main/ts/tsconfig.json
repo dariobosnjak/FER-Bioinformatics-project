@@ -3,7 +3,6 @@
     "target": "es5",
     "lib": ["es6", "dom", "esnext.array"],
     "types": ["mocha", "node"],
-    "sourceMap": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "isolatedModules": false,
