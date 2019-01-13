@@ -9,7 +9,9 @@ export default class FenwickTree {
 
   public update(position: number, value: number): FenwickTree {
     for (let i = position; i <= this.size; i += i & -i) {
-      this.tree[i] = value;
+      if (value > this.tree[i]) {
+        this.tree[i] = value;
+      }
     }
 
     return this;
