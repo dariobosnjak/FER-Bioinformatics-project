@@ -27,18 +27,22 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
       const val = k + maxColDp.query(event.pair.j);
       dp.set(event.pair, val);
     } else {
+      const p: Event = {
+        pair: { i: event.pair.i - k, j: event.pair.j - k },
+        type: event.type
+      };
       const g = findG(event, events);
       if (g) {
-        const val = Math.max(
-          dp.get(event.pair) || 0,
-          (dp.get(g.pair) || 0) + 1
-        );
-        dp.set(event.pair, val);
+        if (dp.get(g.pair) + 1 > dp.get(event.pair)) {
+          dp.set(event.pair, dp.get(g.pair) + 1);
+        }
       }
-      maxColDp.update(
-        event.pair.j + k,
-        Math.max(maxColDp.get(event.pair.j + k) || 0, dp.get(event.pair) || 0)
-      );
+      if (dp.get(p.pair) > maxColDp.get(event.pair.j - 1)) {
+        maxColDp.update(
+          event.pair.j + k,
+          Math.max(maxColDp.get(event.pair.j - 1) || 0, dp.get(event.pair) || 0)
+        );
+      }
     }
   });
 
