@@ -1,0 +1,9 @@
+.idea
+project
+target
+build.sbt
+!/data/synthetic/*
+!/data/results/*
+!/data/bacteria/*
+data/*
+Projekt-Java.iml
