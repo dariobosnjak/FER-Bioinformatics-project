@@ -16,20 +16,12 @@ export default class FenwickTree {
   }
 
   public query(position: number): number {
-    let sum = 0;
+    let max = 0;
     for (let i = position; i > 0; i -= i & -i) {
-      sum += this.tree[i];
+      max = Math.max(this.tree[i], max);
     }
 
-    return sum;
-  }
-
-  public queryRange(leftIdx: number, rightIdx: number): number {
-    if (leftIdx === 1) {
-      return this.query(rightIdx);
-    }
-
-    return this.query(rightIdx) - this.query(leftIdx - 1);
+    return max;
   }
 
   public get(idx: number): number {

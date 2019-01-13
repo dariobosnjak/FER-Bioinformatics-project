@@ -28,14 +28,11 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
     } else {
       const g = findG(event, events);
       if (g) {
-        console.log([dp.keys(), event.pair, g.pair]);
         const val = Math.max(
           dp.get(event.pair) || 0,
           (dp.get(g.pair) || 0) + 1
         );
         dp.set(event.pair, val);
-      } else {
-        console.log("No g");
       }
       maxColDp.increase(
         event.pair.j + k,

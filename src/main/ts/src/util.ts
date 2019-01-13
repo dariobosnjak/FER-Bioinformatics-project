@@ -15,9 +15,6 @@ export function getCharacters(...seqs: Array<string>): Map<string, number> {
 }
 
 export function eventComparator(a: Event, b: Event) {
-  if (!a || !b) {
-    console.log({ a, b });
-  }
   if (a === b) {
     return 0;
   }
