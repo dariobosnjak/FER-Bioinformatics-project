@@ -17,16 +17,16 @@
 
 
 
-##Compile & Run 
+## Code runing 
 1. Clone or download repository
 
 2. Open terminal in Fer-Bioinformatics-project directory
 
 3. Run the code with the following command: `python main.py <k> <input_file>`
  
- * input arguments:
- 1. `<k>` positive integer
- 2. `<input_file>` text file with sequences to analyise
+  * input arguments:
+   1. `<k>` positive integer
+   2. `<input_file>` text file with sequences to analyise
  
 ## License
 
