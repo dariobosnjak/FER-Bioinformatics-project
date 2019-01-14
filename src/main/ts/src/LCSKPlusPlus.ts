@@ -28,19 +28,16 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
     } else {
       const p: Event = {
         pair: { i: event.pair.i - k, j: event.pair.j - k },
-        type: event.type
+        type: EventType.Start
       };
-      const g = findG(p, events);
-      if (g) {
-        dp.set(s(p.pair), (dp.get(s(g.pair)) || 0) + 1);
+      const g: Event = {
+        pair: { i: p.pair.i - 1, j: p.pair.j - 1 },
+        type: EventType.Start
+      };
+      if (dp.has(s(g.pair))) {
+        dp.set(s(p.pair), Math.max(dp.get(s(p.pair)), dp.get(s(g.pair)) + 1));
       }
-      maxColDp.update(
-        p.pair.j + k,
-        Math.max(
-          maxColDp.query(event.pair.j + k) || 0,
-          dp.get(s(event.pair)) || 0
-        )
-      );
+      maxColDp.update(event.pair.j, dp.get(s(p.pair)));
     }
   });
 
@@ -48,32 +45,6 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
     return wu(dp.values()).reduce((max, val) => Math.max(max, val));
   }
   return 0;
-}
-
-function findG(p: Event, events: Array<Event>): Event {
-  const g: Event = {
-    pair: { i: p.pair.i - 1, j: p.pair.j - 1 },
-    type: EventType.Start
-  };
-
-  let left = 0;
-  let right = events.length - 1;
-
-  while (left <= right) {
-    const pivot = Math.floor((right + left) / 2);
-    const compare = eventComparator(events[pivot], g);
-    switch (compare) {
-      case -1:
-        left = pivot + 1;
-        break;
-      case 1:
-        right = pivot - 1;
-        break;
-      case 0:
-        return g;
-    }
-  }
-  return null;
 }
 
 function s(obj: any) {
