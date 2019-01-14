@@ -6,4 +6,4 @@ Compiling files:
 
 # Usage:
 Run main program passing k and input file name:
- - ./main [value of k] [input file name]
+ - ./main [value of k] [input file name and path]
