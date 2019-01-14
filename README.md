@@ -5,7 +5,7 @@
 ###### Step 1: Download the Python 3 Installer
 ###### Step 2: Run the Installer
 ###### Step 3: Add Python to the PATH Environmental Variable:
-  1. click on the **Start Menu** and right click **My Computer** C
+  1. click on the **Start Menu** and right click **My Computer** 
 
   2. click on **Advanced System Settings**
 
@@ -38,7 +38,7 @@ If not installed, install Python 3 using this command in shell:
 #### Linux:
     1. Make sure the first line of file has `#!/usr/bin/env python`. If not, add it.
   
-    2. Run the code in terminal with the following comand: `python main.py <k> <input_file>`
+    2. Run the code in terminal with the following command: `python main.py <k> <input_file>`
 
 3. When execution is finished the results will be saved to text file with name `input_file-k=<k>`
 
