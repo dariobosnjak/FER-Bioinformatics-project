@@ -1,7 +1,7 @@
 import string
 from match_pairs import find_matches
 from fenwick_tree import Fenwick_tree
-import time
+
 
 
 def read_sequence(file):
@@ -9,13 +9,11 @@ def read_sequence(file):
         data = f.read()
 
     data = data.split('>')
-    # prvi dio je prazan pa ce mo ga se rijesiti
     data = data[1:]
 
-    # ukoniti cemo prvu recenicu
     for i in range(len(data)):
         data[i] = data[i][data[i].find('\n'):]
-        # ukloniti cemo sve '\n'
+        #removing all '\n' from sequence
         data[i] = data[i].replace('\n', '')
 
     return data[0], data[1]
@@ -27,7 +25,7 @@ def LCSkpp(string_1,string_2,k):
     events=find_matches(string_1,string_2,k)
     dp={}
     continue_map={}
-
+    
     for event in events:
         if event[2]=="start":
             rest,parent=maxColDp.get(event[1])
