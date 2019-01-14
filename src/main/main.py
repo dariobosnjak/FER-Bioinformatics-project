@@ -18,8 +18,8 @@ def main():
     process=psutil.Process(os.getpid())
     file_output=open("%s-k=%s.txt" %(new_file_name, k),'w')
     file_output.write("Similarity: %s\n" %(similarity))
-    file_output.write("Duration: %s seconds\n" % (time.time() - start_time))
-    file_output.write("Memory usage: %s\n" %(process.memory_info().rss))
+    #file_output.write("Duration: %s seconds\n" % (time.time() - start_time))
+    #file_output.write("Memory usage: %s\n" %(process.memory_info().rss))
 
 
 if __name__ == '__main__':
