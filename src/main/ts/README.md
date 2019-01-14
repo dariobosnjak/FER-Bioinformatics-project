@@ -49,5 +49,5 @@ Other distributions: https://yarnpkg.com/lang/en/docs/install/
 
 ### 3. Test
 
-1. Run `runTests.sh` to run all tests
+1. Run `yarn run-tests` to run all tests
 2. Results are output to `/results`
