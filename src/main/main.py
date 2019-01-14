@@ -14,11 +14,13 @@ def main():
     sequence1, sequence2 = read_sequence(file)
     start_time=time.time()
     similarity=LCSkpp(sequence1,sequence2,k)
-    print (similarity)
-    #time.sleep(5)
-    print("--- %s seconds ---" % (time.time() - start_time))
+    new_file_name=file.replace(".txt","")
     process=psutil.Process(os.getpid())
-    print ("Memory usage:",process.memory_info().rss)
+    file_output=open("%s-k=%s.txt" %(new_file_name, k),'w')
+    file_output.write("Similarity: %s\n" %(similarity))
+    file_output.write("Duration: %s seconds\n" % (time.time() - start_time))
+    file_output.write("Memory usage: %s\n" %(process.memory_info().rss))
+
 
 if __name__ == '__main__':
     main()
