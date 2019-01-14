@@ -1,0 +1,5 @@
+{
+    "result": 17333,
+    "memoryUsage": "417825.33 kB",
+    "duration": "10386.22881 ms"
+}

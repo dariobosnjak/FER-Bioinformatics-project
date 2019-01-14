@@ -45,7 +45,7 @@ describe("fenwick", () => {
   fenwick.update(8, 6);
 
   it("max", () => {
-    expect(0).eq(fenwick.query(2));
+    expect(3).eq(fenwick.query(2));
     expect(7).eq(fenwick.query(9));
   });
 });
