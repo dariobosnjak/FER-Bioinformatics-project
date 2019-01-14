@@ -1,0 +1,9 @@
+k=10
+Creating matches...
+Matches created.
+Sorting matches...
+Sorting done.
+Event search started...
+Processing done.
+max Dp(P)= 4042
+Time elapsed= 11675 ms
