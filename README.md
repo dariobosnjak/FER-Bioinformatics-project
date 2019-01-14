@@ -36,10 +36,10 @@ If not installed, install Python 3 using this command in shell:
       2. `<input_file>` text file with sequences to analyise
 
 #### Linux:
-    1. Make sure first line of file is `#!/usr/bin/env python`. If not, add it.
+  1. Make sure the first line of file has `#!/usr/bin/env python`. If not, add it.
   
-    2. Run the code in your terminal with the following command: `python main.py <k> <input_file>
-  
+  2. Run the code in terminal with the following comand: `python main.py <k> <input_file>`
+
 3. When execution is finished the results will be saved to text file with name `input_file-k=<k>`
 
  
