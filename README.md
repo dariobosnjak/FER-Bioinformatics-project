@@ -17,7 +17,7 @@
 
 
 
-## Code runing 
+## Code running 
 1. Clone or download repository
 
 2. Open terminal in Fer-Bioinformatics-project directory
