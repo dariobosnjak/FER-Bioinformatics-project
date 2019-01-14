@@ -9,7 +9,7 @@ Implementation of research paper [_LCSk_++: Practical similarity metric for long
 - [Java](https://github.com/dariobosnjak/FER-Bioinformatics-project/tree/master/src/main/java)
 - [Scala](https://github.com/dariobosnjak/FER-Bioinformatics-project/tree/master/src/main/scala)
 - [Python](https://github.com/dariobosnjak/FER-Bioinformatics-project/tree/master/src/main/python)
-- [C++](https://github.com/dariobosnjak/FER-Bioinformatics-project/tree/master/src/main/c++)
+- [C++](https://github.com/dariobosnjak/FER-Bioinformatics-project/tree/master/src/main/c%2B%2B)
 - [TypeScript](https://github.com/dariobosnjak/FER-Bioinformatics-project/tree/master/src/main/ts)
 
 ## License
