@@ -10,7 +10,7 @@
   },
   "scripts": {
     "preinstall": "export NODE_OPTIONS=--max_old_space_size=4096",
-    "test": "gulp lint && gulp build && gulp test",
+    "test": "gulp lint && gulp build-js && gulp test",
     "start": "gulp build-js && node src/main.js"
   },
   "devDependencies": {

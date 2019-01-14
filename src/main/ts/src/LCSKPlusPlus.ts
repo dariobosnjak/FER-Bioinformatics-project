@@ -37,7 +37,7 @@ export function lcskPlusPlus(seqA: string, seqB: string, k: number): number {
       maxColDp.update(
         p.pair.j + k,
         Math.max(
-          maxColDp.get(event.pair.j + k) || 0,
+          maxColDp.query(event.pair.j + k) || 0,
           dp.get(s(event.pair)) || 0
         )
       );

@@ -8,22 +8,26 @@ export default class FenwickTree {
   }
 
   public update(position: number, value: number): FenwickTree {
-    for (let i = position; i < this.size; i |= i + 1) {
-      if (value > this.tree[i]) {
-        this.tree[i] += value;
+    let i = position + 1;
+    while (i <= this.size - 1) {
+      if (value >= this.tree[i]) {
+        this.tree[i] = value;
       }
+      i += i & -i;
     }
 
     return this;
   }
 
   public query(position: number): number {
-    let res = 0;
-    for (let i = position; i >= 0; i |= (i & (i + 1)) - 1) {
-      res += this.tree[i];
+    let max = 0;
+    let i = position;
+    while (i > 0) {
+      max = Math.max(max, this.tree[i]);
+      i -= i & -i;
     }
 
-    return res;
+    return max;
   }
 
   public get(idx: number): number {

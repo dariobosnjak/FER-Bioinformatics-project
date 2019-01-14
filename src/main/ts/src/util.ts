@@ -35,12 +35,13 @@ export function eventComparator(a: Event, b: Event) {
   return 1;
 }
 
-export function timed(f: () => any) {
-  const from = new Date();
+export function timed<O>(f: () => O) {
+  const from = process.hrtime();
   const out = f();
-  const to = new Date();
-  const diff = to.getTime() - from.getTime();
-  console.log(`${diff} ms`);
+  const to = process.hrtime();
+  let sec = to[0] - from[0];
+  let ms = (to[1] - from[1]) / 1000000;
+  const diff = sec * 1000 + ms;
   return { result: out, duration: diff };
 }
 
@@ -68,15 +69,15 @@ export function humanizeMemory(bytes: number): string {
     return `${round(res, 2)} B`;
   }
   res /= 1024;
-  if (res < 1024) {
-    return `${round(res, 2)} kB`;
-  }
-  res /= 1024;
-  if (res < 1024) {
-    return `${round(res, 2)} MB`;
-  }
-  res /= 1024;
-  return `${round(res, 2)} GB`;
+  // if (res < 1024) {
+  return `${round(res, 2)} kB`;
+  // }
+  // res /= 1024;
+  // if (res < 1024) {
+  //   return `${round(res, 2)} MB`;
+  // }
+  // res /= 1024;
+  // return `${round(res, 2)} GB`;
 }
 
 export function round(n: number, digits: number): number {
