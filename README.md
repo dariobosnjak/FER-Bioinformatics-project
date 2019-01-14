@@ -1,7 +1,5 @@
 # Bioinformatics project
 
-Implementation of research paper [_LCSk_++: Practical similarity metric for long strings](https://arxiv.org/pdf/1407.2407.pdf).
-
 [Bioinformatics course website](https://www.fer.unizg.hr/en/course/bio)
 
 ## Solutions
