@@ -1,5 +1,5 @@
 import string
-from find_match_pairs import find_matches
+from match_pairs import find_matches
 from fenwick_tree import Fenwick_tree
 import time
 
