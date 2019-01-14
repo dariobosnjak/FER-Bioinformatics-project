@@ -30,15 +30,15 @@ If not installed, install Python 3 using this command in shell:
 
 2. Open terminal in Fer-Bioinformatics-project directory
 #### Windows:
-1. Run the code in command prompt with the following command: `python main.py <k> <input_file>`
-  * input arguments:
-    1. `<k>` positive integer
-    2. `<input_file>` text file with sequences to analyise
+  1. Run the code in command prompt with the following command: `python main.py <k> <input_file>`
+    * input arguments:
+      1. `<k>` positive integer
+      2. `<input_file>` text file with sequences to analyise
 
 #### Linux:
-  1. Make sure first line of file is `#!/usr/bin/env python`. If not, add it.
+    1. Make sure first line of file is `#!/usr/bin/env python`. If not, add it.
   
-  2. Run the code in your terminal with the following command: `python main.py <k> <input_file>
+    2. Run the code in your terminal with the following command: `python main.py <k> <input_file>
   
 3. When execution is finished the results will be saved to text file with name `input_file-k=<k>`
 
