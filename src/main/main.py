@@ -6,7 +6,8 @@ import os
 import psutil
 
 
-
+#reading sequences from file and printing out the similarity
+#print out the time of code execution and memory usage
 def main():
     k=int(sys.argv[1])
     file=sys.argv[2]
