@@ -11,7 +11,9 @@
   "scripts": {
     "preinstall": "export NODE_OPTIONS=--max_old_space_size=4096",
     "test": "gulp lint && gulp build-js && gulp test",
-    "start": "gulp build-js && node src/main.js"
+    "start": "gulp build-js && node src/main.js",
+    "build": "gulp build-js",
+    "run-tests": "./runTests.sh"
   },
   "devDependencies": {
     "@types/chai": "^3.4.34",
@@ -25,7 +27,8 @@
     "gulp-sourcemaps": "^2.1.1",
     "gulp-tslint": "^8.0.0",
     "gulp-typescript": "^3.1.4",
-    "gulp-uglify": "^2.0.0",
+    "gulp-uglify": "^3.0.1",
+    "readable-stream": "^3.1.1",
     "run-sequence": "^1.2.2",
     "tslint": "5.3.2",
     "typescript": "^2.0.3",
