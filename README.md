@@ -26,6 +26,7 @@
   * input arguments:
     1. `<k>` positive integer
     2. `<input_file>` text file with sequences to analyise
+4. When execution is finished the results will be saved to text file with name `input_file-k=<k>`
  
  
  
