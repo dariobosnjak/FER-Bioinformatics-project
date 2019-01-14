@@ -20,8 +20,8 @@ There is a very good chance your Linux distribution has Python installed already
 * python2 --version
 * python3 --version
 If not installed, install Python 3 using this command in shell:
-  * $ sudo apt-get update
-  * $ sudo apt-get install python3.6
+  * `$ sudo apt-get update`
+  * `$ sudo apt-get install python3.6`
 
 
 
